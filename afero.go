@@ -27,8 +27,8 @@ func NewAferoHandler(fs afero.Fs, filename string, prefix string, flag int) (*Af
 	return handler, nil
 }
 
-// Close the logfile when no longer needed
-//  please note this method reinstate the standard console output as default
+// Close the logfile when no longer needed.
+//  Please note this method reinstate the standard console output as default
 func (l *AferoHandler) Close() {
 	if l.file != nil {
 		l.file.Sync()
@@ -36,7 +36,7 @@ func (l *AferoHandler) Close() {
 		l.file = nil
 	}
 	// make sure any other call to the logger won't panic
-	l.stdlog.SetOutput(os.Stdout)
+	l.SetOutput(os.Stderr)
 }
 
 // Verify interface

@@ -34,7 +34,7 @@ func (l *FileHandler) Close() {
 		l.file = nil
 	}
 	// make sure any other call to the logger won't panic
-	l.stdlog.SetOutput(os.Stdout)
+	l.SetOutput(os.Stderr)
 }
 
 // Verify interface

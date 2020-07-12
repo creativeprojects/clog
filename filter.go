@@ -25,8 +25,7 @@ func (l *LevelFilter) Log(logEntry LogEntry) error {
 	if logEntry.Level < l.minLevel {
 		return nil
 	}
-	l.destLog.Log(logEntry)
-	return nil
+	return l.destLog.Log(logEntry)
 }
 
 // Verify interface

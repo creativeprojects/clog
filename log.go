@@ -1,7 +1,9 @@
 package clog
 
+import "log"
+
 var (
-	defaultLogger = NewLogger(NewConsoleHandler())
+	defaultLogger = NewLogger(NewConsoleHandler("", log.LstdFlags))
 )
 
 // SetDefaultLogger sets the logger used when using the package methods

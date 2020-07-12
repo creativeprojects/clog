@@ -24,57 +24,69 @@ func (l *Logger) GetHandler() Handler {
 
 // Log sends a log entry with the specified level
 func (l *Logger) Log(level LogLevel, v ...interface{}) {
-	l.handler.Log(LogEntry{
-		Level:  level,
-		Values: v,
-	})
+	l.log(level, v...)
 }
 
 // Logf sends a log entry with the specified level
 func (l *Logger) Logf(level LogLevel, format string, v ...interface{}) {
-	l.handler.Log(LogEntry{
-		Level:  level,
-		Format: format,
-		Values: v,
-	})
+	l.logf(level, format, v...)
 }
 
 // Debug sends debugging information
 func (l *Logger) Debug(v ...interface{}) {
-	l.Log(LevelDebug, v...)
+	l.log(LevelDebug, v...)
 }
 
 // Debugf sends debugging information
 func (l *Logger) Debugf(format string, v ...interface{}) {
-	l.Logf(LevelDebug, format, v...)
+	l.logf(LevelDebug, format, v...)
 }
 
 // Info logs some noticeable information
 func (l *Logger) Info(v ...interface{}) {
-	l.Log(LevelInfo, v...)
+	l.log(LevelInfo, v...)
 }
 
 // Infof logs some noticeable information
 func (l *Logger) Infof(format string, v ...interface{}) {
-	l.Logf(LevelInfo, format, v...)
+	l.logf(LevelInfo, format, v...)
 }
 
 // Warning send some important message to the console
 func (l *Logger) Warning(v ...interface{}) {
-	l.Log(LevelWarning, v...)
+	l.log(LevelWarning, v...)
 }
 
 // Warningf send some important message to the console
 func (l *Logger) Warningf(format string, v ...interface{}) {
-	l.Logf(LevelWarning, format, v...)
+	l.logf(LevelWarning, format, v...)
 }
 
 // Error sends error information to the console
 func (l *Logger) Error(v ...interface{}) {
-	l.Log(LevelError, v...)
+	l.log(LevelError, v...)
 }
 
 // Errorf sends error information to the console
 func (l *Logger) Errorf(format string, v ...interface{}) {
-	l.Logf(LevelError, format, v...)
+	l.logf(LevelError, format, v...)
+}
+
+// log is used to keep a constant calldepth
+func (l *Logger) log(level LogLevel, v ...interface{}) {
+	l.handler.Log(LogEntry{
+		Calldepth: 1,
+		Level:     level,
+		Values:    v,
+	})
+}
+
+// logf is used to keep a constant calldepth
+func (l *Logger) logf(level LogLevel, format string, v ...interface{}) {
+	l.handler.Log(LogEntry{
+		Calldepth: 1,
+		Level:     level,
+		Format:    format,
+		Values:    v,
+	})
 }

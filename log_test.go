@@ -2,6 +2,7 @@ package clog
 
 import (
 	"bytes"
+	"io/ioutil"
 	"log"
 	"strings"
 	"sync"
@@ -62,8 +63,31 @@ func TestLoggerVerbosity(t *testing.T) {
 
 func BenchmarkStreamMessages(b *testing.B) {
 	b.ReportAllocs()
-	buffer := &bytes.Buffer{}
-	streamHandler := NewStandardLogHandler(buffer, "", log.LstdFlags)
+	streamHandler := NewStandardLogHandler(ioutil.Discard, "", log.LstdFlags)
+	logger := NewLogger(NewLevelFilter(LevelDebug, streamHandler))
+	param1 := "string"
+	param2 := 0
+
+	for i := 0; i < b.N; i++ {
+		logger.Info("Message with", param1, param2)
+	}
+}
+
+func BenchmarkStreamFilteredMessages(b *testing.B) {
+	b.ReportAllocs()
+	streamHandler := NewStandardLogHandler(ioutil.Discard, "", log.LstdFlags)
+	logger := NewLogger(NewLevelFilter(LevelWarning, streamHandler))
+	param1 := "string"
+	param2 := 0
+
+	for i := 0; i < b.N; i++ {
+		logger.Info("Message with", param1, param2)
+	}
+}
+
+func BenchmarkStreamFormattedMessages(b *testing.B) {
+	b.ReportAllocs()
+	streamHandler := NewStandardLogHandler(ioutil.Discard, "", log.LstdFlags)
 	logger := NewLogger(NewLevelFilter(LevelDebug, streamHandler))
 	param1 := "string"
 	param2 := 0
@@ -73,10 +97,9 @@ func BenchmarkStreamMessages(b *testing.B) {
 	}
 }
 
-func BenchmarkStreamFilteredMessages(b *testing.B) {
+func BenchmarkStreamFilteredFormattedMessages(b *testing.B) {
 	b.ReportAllocs()
-	buffer := &bytes.Buffer{}
-	streamHandler := NewStandardLogHandler(buffer, "", log.LstdFlags)
+	streamHandler := NewStandardLogHandler(ioutil.Discard, "", log.LstdFlags)
 	logger := NewLogger(NewLevelFilter(LevelWarning, streamHandler))
 	param1 := "string"
 	param2 := 0

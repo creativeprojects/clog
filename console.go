@@ -19,9 +19,9 @@ type ConsoleHandler struct {
 }
 
 // NewConsoleHandler creates a new handler to send logs to the console
-func NewConsoleHandler() *ConsoleHandler {
+func NewConsoleHandler(prefix string, flag int) *ConsoleHandler {
 	console := &ConsoleHandler{
-		logger: log.New(os.Stdout, "", log.LstdFlags),
+		logger: log.New(os.Stdout, prefix, flag),
 	}
 	console.init()
 	return console
@@ -60,31 +60,16 @@ func (l *ConsoleHandler) SetTheme(theme string) {
 	}
 }
 
-// Colorize activate of deactivate colouring
-func (l *ConsoleHandler) Colorize(colorize bool) {
-	color.NoColor = !colorize
+// Colouring activate of deactivate displaying messages in colour in the console
+func (l *ConsoleHandler) Colouring(colouring bool) {
+	color.NoColor = !colouring
 }
 
 // Log sends a log entry with the specified level
 func (l *ConsoleHandler) Log(logEntry LogEntry) error {
-	if logEntry.Format == "" {
-		l.message(l.levelMap[logEntry.Level], logEntry.Values...)
-		return nil
-	}
-	l.messagef(l.levelMap[logEntry.Level], logEntry.Format, logEntry.Values...)
-	return nil
-}
-
-func (l *ConsoleHandler) message(c *color.Color, v ...interface{}) {
-	l.setColor(c)
-	l.logger.Println(v...)
-	l.unsetColor()
-}
-
-func (l *ConsoleHandler) messagef(c *color.Color, format string, v ...interface{}) {
-	l.setColor(c)
-	l.logger.Printf(format+"\n", v...)
-	l.unsetColor()
+	l.setColor(l.levelMap[logEntry.Level])
+	defer l.unsetColor()
+	return l.logger.Output(logEntry.Calldepth+2, logEntry.GetMessage())
 }
 
 func (l *ConsoleHandler) setColor(c *color.Color) {
