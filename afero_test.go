@@ -58,7 +58,7 @@ func TestAferoDeleteLogFile(t *testing.T) {
 	// the logger should stay silent
 	logger.Logf(LevelInfo, "%d %d %d", 1, 2, 3)
 	// but the handler should return an error, and it doesn't, yet
-	err = handler.Log(LogEntry{
+	err = handler.LogEntry(LogEntry{
 		Level:  LevelDebug,
 		Values: []interface{}{"test"},
 	})

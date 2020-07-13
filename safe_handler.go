@@ -14,11 +14,11 @@ func NewSafeHandler(primary, backup Handler) *SafeHandler {
 	}
 }
 
-// Log send messages to primaryHandler first, then to backupHandler if it had fail
-func (l *SafeHandler) Log(logEntry LogEntry) error {
-	err := l.primaryHandler.Log(logEntry)
+// LogEntry send messages to primaryHandler first, then to backupHandler if it had fail
+func (l *SafeHandler) LogEntry(logEntry LogEntry) error {
+	err := l.primaryHandler.LogEntry(logEntry)
 	if err != nil {
-		return l.backupHandler.Log(logEntry)
+		return l.backupHandler.LogEntry(logEntry)
 	}
 	return nil
 }

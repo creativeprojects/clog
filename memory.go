@@ -12,8 +12,8 @@ func NewMemoryHandler() *MemoryHandler {
 	}
 }
 
-// Log keep the messages in memory.
-func (l *MemoryHandler) Log(logEntry LogEntry) error {
+// LogEntry keep the messages in memory.
+func (l *MemoryHandler) LogEntry(logEntry LogEntry) error {
 	l.log = append(l.log, logEntry.GetMessage())
 	return nil
 }

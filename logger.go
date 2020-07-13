@@ -74,7 +74,7 @@ func (l *Logger) Errorf(format string, v ...interface{}) {
 
 // log is used to keep a constant calldepth
 func (l *Logger) log(level LogLevel, v ...interface{}) {
-	l.handler.Log(LogEntry{
+	l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     level,
 		Values:    v,
@@ -83,7 +83,7 @@ func (l *Logger) log(level LogLevel, v ...interface{}) {
 
 // logf is used to keep a constant calldepth
 func (l *Logger) logf(level LogLevel, format string, v ...interface{}) {
-	l.handler.Log(LogEntry{
+	l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     level,
 		Format:    format,

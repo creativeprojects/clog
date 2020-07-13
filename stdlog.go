@@ -18,8 +18,8 @@ func NewStandardLogHandler(out io.Writer, prefix string, flag int) *StandardLogH
 	return handler
 }
 
-// Log sends a log entry with the specified level.
-func (l *StandardLogHandler) Log(logEntry LogEntry) error {
+// LogEntry sends a log entry with the specified level.
+func (l *StandardLogHandler) LogEntry(logEntry LogEntry) error {
 	return l.stdlog.Output(2, logEntry.GetMessageWithLevelPrefix())
 }
 

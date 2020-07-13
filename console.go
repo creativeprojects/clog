@@ -65,8 +65,8 @@ func (l *ConsoleHandler) Colouring(colouring bool) {
 	color.NoColor = !colouring
 }
 
-// Log sends a log entry with the specified level
-func (l *ConsoleHandler) Log(logEntry LogEntry) error {
+// LogEntry sends a log entry with the specified level
+func (l *ConsoleHandler) LogEntry(logEntry LogEntry) error {
 	l.setColor(l.levelMap[logEntry.Level])
 	defer l.unsetColor()
 	return l.logger.Output(logEntry.Calldepth+2, logEntry.GetMessage())

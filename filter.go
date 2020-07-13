@@ -20,12 +20,12 @@ func (l *LevelFilter) SetLevel(minLevel LogLevel) {
 	l.minLevel = minLevel
 }
 
-// Log the LogEntry
-func (l *LevelFilter) Log(logEntry LogEntry) error {
+// LogEntry the LogEntry
+func (l *LevelFilter) LogEntry(logEntry LogEntry) error {
 	if logEntry.Level < l.minLevel {
 		return nil
 	}
-	return l.destLog.Log(logEntry)
+	return l.destLog.LogEntry(logEntry)
 }
 
 // Verify interface

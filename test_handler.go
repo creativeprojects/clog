@@ -27,11 +27,11 @@ func SetTestLog(t TestLogInterface) {
 
 // ClearTestLog at the end of the test otherwise the logger will keep a reference on t
 func ClearTestLog() {
-	SetDefaultLogger(NewLogger(&NullHandler{}))
+	SetDefaultLogger(NewLogger(&DiscardHandler{}))
 }
 
-// Log sends a log entry with the specified level
-func (l *TestHandler) Log(logEntry LogEntry) error {
+// LogEntry sends a log entry with the specified level
+func (l *TestHandler) LogEntry(logEntry LogEntry) error {
 	if logEntry.Format == "" {
 		l.t.Log(append([]interface{}{logEntry.Level.String()}, logEntry.Values...)...)
 		return nil
