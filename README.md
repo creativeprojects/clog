@@ -24,5 +24,5 @@ func main() {
 
 ```
 
-![alt text](https://github.com/creativeprojects/clog/tree/master/filter.png "FilteredHandler & ConsoleHandler")
+![alt text](https://github.com/creativeprojects/clog/raw/master/filter.png "FilteredHandler & ConsoleHandler")
 
