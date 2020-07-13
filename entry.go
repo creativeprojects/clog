@@ -6,10 +6,10 @@ import (
 
 // LogEntry represents a log entry
 type LogEntry struct {
-	Calldepth int
-	Level     LogLevel
-	Format    string
-	Values    []interface{}
+	Calldepth int           // Calldepth is used to calculate the right place where we called the log method
+	Level     LogLevel      // Debug, Info, Warning or Error
+	Format    string        // Format for *printf (leave blank for *print)
+	Values    []interface{} // Values for *print and *printf
 }
 
 // GetMessage returns the formatted message from Format & Values

@@ -20,7 +20,7 @@ func NewStandardLogHandler(out io.Writer, prefix string, flag int) *StandardLogH
 
 // LogEntry sends a log entry with the specified level.
 func (l *StandardLogHandler) LogEntry(logEntry LogEntry) error {
-	return l.stdlog.Output(2, logEntry.GetMessageWithLevelPrefix())
+	return l.stdlog.Output(logEntry.Calldepth+2, logEntry.GetMessageWithLevelPrefix())
 }
 
 // SetOutput sets the output destination for the logger.

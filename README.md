@@ -7,3 +7,19 @@ So here's yet another logger for Go:
 - very fast
 - using the logger from the standard library under the hood
 - extensible (via handlers)
+
+Have a look at the [examples](https://github.com/creativeprojects/clog/tree/master/examples) if you like the look of it
+
+Here's a very simple one:
+
+```go
+import "github.com/creativeprojects/clog"
+
+func main() {
+	log := clog.NewFilteredConsoleLogger(clog.LevelInfo)
+
+	log.Debug("will be discarded")
+	log.Info("will be displayed")
+}
+
+```

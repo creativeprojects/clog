@@ -12,6 +12,16 @@ func NewLogger(handler Handler) *Logger {
 	}
 }
 
+// NewConsoleLogger is a shortcut to create a Logger with a ConsoleHandler
+func NewConsoleLogger() *Logger {
+	return NewLogger(NewConsoleHandler("", 0))
+}
+
+// NewFilteredConsoleLogger is a shortcut to create a Logger with a FilteredHandler sending to a ConsoleHandler
+func NewFilteredConsoleLogger(minLevel LogLevel) *Logger {
+	return NewLogger(NewLevelFilter(minLevel, NewConsoleHandler("", 0)))
+}
+
 // SetHandler sets a new handler for the logger
 func (l *Logger) SetHandler(handler Handler) {
 	l.handler = handler
@@ -75,7 +85,7 @@ func (l *Logger) Errorf(format string, v ...interface{}) {
 // log is used to keep a constant calldepth
 func (l *Logger) log(level LogLevel, v ...interface{}) {
 	l.handler.LogEntry(LogEntry{
-		Calldepth: 1,
+		Calldepth: 2,
 		Level:     level,
 		Values:    v,
 	})
@@ -84,9 +94,20 @@ func (l *Logger) log(level LogLevel, v ...interface{}) {
 // logf is used to keep a constant calldepth
 func (l *Logger) logf(level LogLevel, format string, v ...interface{}) {
 	l.handler.LogEntry(LogEntry{
-		Calldepth: 1,
+		Calldepth: 2,
 		Level:     level,
 		Format:    format,
 		Values:    v,
 	})
 }
+
+// LogEntry sends a LogEntry directly. Logger can also be used as a Handler
+func (l *Logger) LogEntry(logEntry LogEntry) error {
+	logEntry.Calldepth++
+	return l.handler.LogEntry(logEntry)
+}
+
+// Logger is also a Handler
+var (
+	_ Handler = &Logger{}
+)

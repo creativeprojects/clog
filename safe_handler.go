@@ -16,6 +16,7 @@ func NewSafeHandler(primary, backup Handler) *SafeHandler {
 
 // LogEntry send messages to primaryHandler first, then to backupHandler if it had fail
 func (l *SafeHandler) LogEntry(logEntry LogEntry) error {
+	logEntry.Calldepth++
 	err := l.primaryHandler.LogEntry(logEntry)
 	if err != nil {
 		return l.backupHandler.LogEntry(logEntry)
