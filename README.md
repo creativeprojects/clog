@@ -4,7 +4,7 @@ All the fashionable loggers for Go tend to focus on structured logging, and that
 So here's yet another logger for Go:
 - unstructured logging
 - console logging in colour
-- very fast
+- simple to use
 - using the logger from the standard library under the hood
 - extensible (via handlers)
 
