@@ -2,6 +2,7 @@ package clog
 
 import (
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -45,9 +46,13 @@ func TestFileDeleteLogFile(t *testing.T) {
 
 	logger.Log(LevelInfo, "one", "two", "three")
 
-	// apparently the file can be deleted...
 	err = os.Remove(filename)
-	assert.NoError(t, err)
+	if runtime.GOOS == "windows" {
+		assert.Error(t, err)
+	} else {
+		// apparently the file can be deleted on unixes...
+		assert.NoError(t, err)
+	}
 
 	// the logger should stay silent
 	logger.Logf(LevelInfo, "%d %d %d", 1, 2, 3)
@@ -59,7 +64,9 @@ func TestFileDeleteLogFile(t *testing.T) {
 	assert.NoError(t, err)
 
 	handler.Close()
-	if _, err := os.Stat(filename); err == nil || os.IsExist(err) {
-		t.Errorf("logfile still exists: %s", filename)
+	if runtime.GOOS != "windows" {
+		if _, err := os.Stat(filename); err == nil || os.IsExist(err) {
+			t.Errorf("logfile still exists: %s", filename)
+		}
 	}
 }
