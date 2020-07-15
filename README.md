@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/creativeprojects/clog.svg?branch=master)](https://travis-ci.com/creativeprojects/clog)
+[![Go Report Card](https://goreportcard.com/badge/github.com/creativeprojects/clog)](https://goreportcard.com/report/github.com/creativeprojects/clog)
+
 # clog (console-log)
 All the fashionable loggers for Go tend to focus on structured logging, and that's perfectly fine: until you simply need a logger for a console application...
 

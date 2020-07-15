@@ -23,10 +23,11 @@ func TestFilteredLogger(t *testing.T) {
 	}
 
 	buffer := &bytes.Buffer{}
-	handler := NewStandardLogHandler(buffer, "", 0)
+	handler := NewLevelFilter(LevelDebug, NewStandardLogHandler(buffer, "", 0))
+	logger := NewLogger(handler)
 
 	for minLevel := LevelDebug; minLevel <= LevelError; minLevel++ {
-		logger := NewLogger(NewLevelFilter(minLevel, handler))
+		handler.SetLevel(minLevel)
 		for logLevel := LevelDebug; logLevel <= LevelError; logLevel++ {
 			logger.Logf(logLevel, "%d >= %d", logLevel, minLevel)
 		}
