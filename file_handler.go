@@ -33,7 +33,7 @@ func (l *FileHandler) Close() {
 		l.file.Close()
 		l.file = nil
 	}
-	// make sure any other call to the logger won't panic
+	// make sure any other call to the handler won't panic
 	l.SetOutput(os.Stderr)
 }
 

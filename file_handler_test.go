@@ -2,7 +2,6 @@ package clog
 
 import (
 	"os"
-	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -19,16 +18,7 @@ func TestFileLogExist(t *testing.T) {
 	logger := NewLogger(handler)
 
 	logger.Log(LevelInfo, "one", "two", "three")
-	logger.Debug("one", "two", "three")
-	logger.Info("one", "two", "three")
-	logger.Warning("one", "two", "three")
-	logger.Error("one", "two", "three")
-
 	logger.Logf(LevelInfo, "%d %d %d", 1, 2, 3)
-	logger.Debugf("%d %d %d", 1, 2, 3)
-	logger.Infof("%d %d %d", 1, 2, 3)
-	logger.Warningf("%d %d %d", 1, 2, 3)
-	logger.Errorf("%d %d %d", 1, 2, 3)
 
 	handler.Close()
 	if _, err := os.Stat(filename); err != nil || os.IsNotExist(err) {
@@ -36,37 +26,50 @@ func TestFileLogExist(t *testing.T) {
 	}
 }
 
-func TestFileDeleteLogFile(t *testing.T) {
+func TestFileCloseLogFile(t *testing.T) {
 	filename := "test2.log"
 
 	handler, err := NewFileHandler(filename, "", 0)
 	require.NoError(t, err)
+	defer handler.Close()
+	defer os.Remove(filename)
 
 	logger := NewLogger(handler)
 
 	logger.Log(LevelInfo, "one", "two", "three")
 
-	err = os.Remove(filename)
-	if runtime.GOOS == "windows" {
-		assert.Error(t, err)
-	} else {
-		// apparently the file can be deleted on unixes...
-		assert.NoError(t, err)
-	}
+	// drastically close the file
+	handler.file.Close()
 
 	// the logger should stay silent
 	logger.Logf(LevelInfo, "%d %d %d", 1, 2, 3)
-	// but the handler should return an error, and it doesn't, yet
+	// but the handler should return an error
+	err = handler.LogEntry(LogEntry{
+		Level:  LevelDebug,
+		Values: []interface{}{"test"},
+	})
+	assert.Error(t, err)
+}
+
+func TestCloseFileHandler(t *testing.T) {
+	filename := "test3.log"
+
+	handler, err := NewFileHandler(filename, "", 0)
+	require.NoError(t, err)
+	defer handler.Close()
+	defer os.Remove(filename)
+
+	logger := NewLogger(handler)
+
+	logger.Log(LevelInfo, "one", "two", "three")
+
+	// close the handler properly
+	handler.Close()
+
+	// but the handler should not return an error as the outpout should have been diverted
 	err = handler.LogEntry(LogEntry{
 		Level:  LevelDebug,
 		Values: []interface{}{"test"},
 	})
 	assert.NoError(t, err)
-
-	handler.Close()
-	if runtime.GOOS != "windows" {
-		if _, err := os.Stat(filename); err == nil || os.IsExist(err) {
-			t.Errorf("logfile still exists: %s", filename)
-		}
-	}
 }
