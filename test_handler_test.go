@@ -4,7 +4,7 @@ import "testing"
 
 func TestTestHandler(t *testing.T) {
 	SetTestLog(t)
-	defer ClearTestLog()
+	defer CloseTestLog()
 
 	Log(LevelInfo, "one", "two", "three")
 	Debug("one", "two", "three")

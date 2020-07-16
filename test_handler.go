@@ -20,13 +20,26 @@ func NewTestHandler(t TestLogInterface) *TestHandler {
 }
 
 // SetTestLog install a test logger as the default logger.
-//  IMPORTANT: don't forget to run ClearTestLog() at the end of the test
+// A test logger redirects all logs sent through the package methods to the Log/Logf methods of your test
+//
+// IMPORTANT: don't forget to CloseTestLog() at the end of the test
+//
+// Example:
+//
+// 	func TestLog(t *testing.T) {
+// 		SetTestLog(t)
+// 		defer CloseTestLog()
+// 		// These two calls are equivalent:
+// 		clog.Debug("debug message")
+// 		t.Log("debug message")
+// 	}
 func SetTestLog(t TestLogInterface) {
 	SetDefaultLogger(NewLogger(NewTestHandler(t)))
 }
 
-// ClearTestLog at the end of the test otherwise the logger will keep a reference on t
-func ClearTestLog() {
+// CloseTestLog at the end of the test otherwise the logger will keep a reference on t.
+// For a description on how to use it, see SetTestLog()
+func CloseTestLog() {
 	SetDefaultLogger(NewLogger(&DiscardHandler{}))
 }
 
