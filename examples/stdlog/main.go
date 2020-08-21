@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/creativeprojects/clog"
 )
 
@@ -33,7 +31,7 @@ func (s *someLibrary) doStuff() {
 }
 
 func main() {
-	handler := clog.NewConsoleHandler("library ", log.LstdFlags|log.Lmsgprefix)
+	handler := clog.NewConsoleHandler("library: ", 0)
 	lib := &someLibrary{
 		Logger: clog.NewStandardLogger(clog.LevelInfo, handler),
 	}
