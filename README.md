@@ -7,7 +7,11 @@ All the fashionable loggers for Go tend to focus on structured logging, and that
 So here's yet another logger for Go:
 - unstructured logging
 - console logging in colour
+- file logging
 - simple to use
+- filter your logs with 4 levels of severity
+- redirect your logs to an io.Writer
+- get logs coming from an io.Writer
 - using the logger from the standard library under the hood
 - extensible (via handlers)
 
