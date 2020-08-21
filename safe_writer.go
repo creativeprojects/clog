@@ -15,6 +15,7 @@ type SafeWriter struct {
 func NewSafeWriter(writer io.Writer) *SafeWriter {
 	return &SafeWriter{
 		writer: writer,
+		mu:     sync.Mutex{},
 	}
 }
 
