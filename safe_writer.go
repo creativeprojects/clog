@@ -24,7 +24,7 @@ func (w *SafeWriter) Write(p []byte) (n int, err error) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 
-	return w.Write(p)
+	return w.writer.Write(p)
 }
 
 // Verify interface
