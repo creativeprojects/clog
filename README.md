@@ -33,3 +33,4 @@ func main() {
 
 ![alt text](https://github.com/creativeprojects/clog/raw/master/filter.png "FilteredHandler & ConsoleHandler")
 
+Documentation available on [GoDoc](https://pkg.go.dev/github.com/creativeprojects/clog?tab=doc)
