@@ -14,6 +14,7 @@ func GetDefaultLogger() *Logger {
 	return defaultLogger
 }
 
+// SetPrefix sets the output prefix for the standard logger
 func SetPrefix(prefix string) {
 	defaultLogger.SetPrefix(prefix)
 }
