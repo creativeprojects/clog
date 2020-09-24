@@ -1,5 +1,7 @@
 package clog
 
+import "errors"
+
 // Logger frontend
 type Logger struct {
 	handler Handler
@@ -30,6 +32,14 @@ func (l *Logger) SetHandler(handler Handler) {
 // GetHandler returns the current handler used by the logger
 func (l *Logger) GetHandler() Handler {
 	return l.handler
+}
+
+// SetPrefix sets the output prefix for the standard logger
+func (l *Logger) SetPrefix(prefix string) {
+	if l.handler == nil {
+		return
+	}
+	l.handler.SetPrefix(prefix)
 }
 
 // Log sends a log entry with the specified level
@@ -84,6 +94,9 @@ func (l *Logger) Errorf(format string, v ...interface{}) {
 
 // log is used to keep a constant calldepth
 func (l *Logger) log(level LogLevel, v ...interface{}) {
+	if l.handler == nil {
+		return
+	}
 	l.handler.LogEntry(LogEntry{
 		Calldepth: 2,
 		Level:     level,
@@ -93,6 +106,9 @@ func (l *Logger) log(level LogLevel, v ...interface{}) {
 
 // logf is used to keep a constant calldepth
 func (l *Logger) logf(level LogLevel, format string, v ...interface{}) {
+	if l.handler == nil {
+		return
+	}
 	l.handler.LogEntry(LogEntry{
 		Calldepth: 2,
 		Level:     level,
@@ -103,6 +119,9 @@ func (l *Logger) logf(level LogLevel, format string, v ...interface{}) {
 
 // LogEntry sends a LogEntry directly. Logger can also be used as a Handler
 func (l *Logger) LogEntry(logEntry LogEntry) error {
+	if l.handler == nil {
+		return errors.New("no registered handler")
+	}
 	logEntry.Calldepth++
 	return l.handler.LogEntry(logEntry)
 }

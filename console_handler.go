@@ -65,6 +65,11 @@ func (l *ConsoleHandler) Colouring(colouring bool) {
 	color.NoColor = !colouring
 }
 
+// SetPrefix sets a prefix on every log message
+func (l *ConsoleHandler) SetPrefix(prefix string) {
+	l.logger.SetPrefix(prefix)
+}
+
 // LogEntry sends a log entry with the specified level
 func (l *ConsoleHandler) LogEntry(logEntry LogEntry) error {
 	l.setColor(l.levelMap[logEntry.Level])

@@ -24,6 +24,9 @@ func (l *MemoryHandler) LogEntry(logEntry LogEntry) error {
 	return nil
 }
 
+// SetPrefix does nothing on the memory handler
+func (l *MemoryHandler) SetPrefix(prefix string) {}
+
 // Verify interface
 var (
 	_ Handler = &MemoryHandler{}

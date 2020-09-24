@@ -20,6 +20,9 @@ func (l *DiscardHandler) LogEntry(LogEntry) error {
 	return errorDiscarded
 }
 
+// SetPrefix sets a prefix on every log message
+func (l *DiscardHandler) SetPrefix(string) {}
+
 // Verify interface
 var (
 	_ Handler = &DiscardHandler{}

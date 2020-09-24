@@ -1,5 +1,7 @@
 package clog
 
+import "errors"
+
 // LevelFilter is a log middleware that is only passing log entries of level >= minimum level
 type LevelFilter struct {
 	handler  Handler
@@ -30,8 +32,19 @@ func (l *LevelFilter) GetHandler() Handler {
 	return l.handler
 }
 
+// SetPrefix sets a prefix on every log message
+func (l *LevelFilter) SetPrefix(prefix string) {
+	if l.handler == nil {
+		return
+	}
+	l.handler.SetPrefix(prefix)
+}
+
 // LogEntry the LogEntry
 func (l *LevelFilter) LogEntry(logEntry LogEntry) error {
+	if l.handler == nil {
+		return errors.New("no registered handler")
+	}
 	if logEntry.Level < l.minLevel {
 		return nil
 	}

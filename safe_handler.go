@@ -24,6 +24,16 @@ func (l *SafeHandler) LogEntry(logEntry LogEntry) error {
 	return nil
 }
 
+// SetPrefix sets a prefix on every log message
+func (l *SafeHandler) SetPrefix(prefix string) {
+	if l.primaryHandler != nil {
+		l.primaryHandler.SetPrefix(prefix)
+	}
+	if l.backupHandler != nil {
+		l.backupHandler.SetPrefix(prefix)
+	}
+}
+
 // Verify interface
 var (
 	_ Handler = &SafeHandler{}

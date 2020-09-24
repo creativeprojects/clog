@@ -12,6 +12,29 @@ type LogEntry struct {
 	Values    []interface{} // Values for *print and *printf
 }
 
+// NewLogEntry creates a new LogEntry composed of values.
+//
+// values parameter is comparable to fmt.Sprint(values...)
+func NewLogEntry(callDepth int, level LogLevel, values ...interface{}) LogEntry {
+	return LogEntry{
+		Calldepth: callDepth,
+		Level:     level,
+		Values:    values,
+	}
+}
+
+// NewLogEntryf creates a new formatted LogEntry with values.
+//
+// parameters are comparable to fmt.Sprintf(format, values...)
+func NewLogEntryf(callDepth int, level LogLevel, format string, values ...interface{}) LogEntry {
+	return LogEntry{
+		Calldepth: callDepth,
+		Level:     level,
+		Format:    format,
+		Values:    values,
+	}
+}
+
 // GetMessage returns the formatted message from Format & Values
 func (l LogEntry) GetMessage() string {
 	if l.Format == "" {

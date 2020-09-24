@@ -53,6 +53,9 @@ func (l *TestHandler) LogEntry(logEntry LogEntry) error {
 	return nil
 }
 
+// SetPrefix does nothing on the test handler
+func (l *TestHandler) SetPrefix(prefix string) {}
+
 // Verify interface
 var (
 	_ Handler = &TestHandler{}

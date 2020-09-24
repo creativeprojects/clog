@@ -28,6 +28,11 @@ func (l *StandardLogHandler) SetOutput(output io.Writer) {
 	l.stdlog.SetOutput(output)
 }
 
+// SetPrefix sets a prefix on every log message
+func (l *StandardLogHandler) SetPrefix(prefix string) {
+	l.stdlog.SetPrefix(prefix)
+}
+
 // Verify interface
 var (
 	_ Handler = &StandardLogHandler{}

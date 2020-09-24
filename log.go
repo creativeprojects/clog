@@ -14,6 +14,10 @@ func GetDefaultLogger() *Logger {
 	return defaultLogger
 }
 
+func SetPrefix(prefix string) {
+	defaultLogger.SetPrefix(prefix)
+}
+
 // Log sends a log entry with the specified level
 func Log(level LogLevel, v ...interface{}) {
 	defaultLog(level, v...)
