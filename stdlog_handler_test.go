@@ -12,6 +12,7 @@ func TestPrefix(t *testing.T) {
 	buffer := &bytes.Buffer{}
 	handler := NewStandardLogHandler(buffer, "prefix", 0)
 	handler.LogEntry(LogEntry{
+		Level:  LevelDebug,
 		Values: []interface{}{"message"},
 	})
 	assert.Equal(t, "prefixDEBUG message\n", buffer.String())

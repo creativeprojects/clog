@@ -10,25 +10,30 @@ import (
 
 func TestFilteredLogger(t *testing.T) {
 	expected := []string{
-		"DEBUG 0 >= 0",
-		"INFO  1 >= 0",
-		"WARN  2 >= 0",
-		"ERROR 3 >= 0",
-		"INFO  1 >= 1",
-		"WARN  2 >= 1",
-		"ERROR 3 >= 1",
-		"WARN  2 >= 2",
-		"ERROR 3 >= 2",
-		"ERROR 3 >= 3",
+		"TRACE 0 >= 0",
+		"DEBUG 1 >= 0",
+		"INFO  2 >= 0",
+		"WARN  3 >= 0",
+		"ERROR 4 >= 0",
+		"DEBUG 1 >= 1",
+		"INFO  2 >= 1",
+		"WARN  3 >= 1",
+		"ERROR 4 >= 1",
+		"INFO  2 >= 2",
+		"WARN  3 >= 2",
+		"ERROR 4 >= 2",
+		"WARN  3 >= 3",
+		"ERROR 4 >= 3",
+		"ERROR 4 >= 4",
 	}
 
 	buffer := &bytes.Buffer{}
-	handler := NewLevelFilter(LevelDebug, NewStandardLogHandler(buffer, "", 0))
+	handler := NewLevelFilter(LevelTrace, NewStandardLogHandler(buffer, "", 0))
 	logger := NewLogger(handler)
 
-	for minLevel := LevelDebug; minLevel <= LevelError; minLevel++ {
+	for minLevel := LevelTrace; minLevel <= LevelError; minLevel++ {
 		handler.SetLevel(minLevel)
-		for logLevel := LevelDebug; logLevel <= LevelError; logLevel++ {
+		for logLevel := LevelTrace; logLevel <= LevelError; logLevel++ {
 			logger.Logf(logLevel, "%d >= %d", logLevel, minLevel)
 		}
 	}

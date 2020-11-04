@@ -52,6 +52,16 @@ func (l *Logger) Logf(level LogLevel, format string, v ...interface{}) {
 	l.logf(level, format, v...)
 }
 
+// Trace sends trace information for heavy debugging
+func (l *Logger) Trace(v ...interface{}) {
+	l.log(LevelTrace, v...)
+}
+
+// Tracef sends trace information for heavy debugging
+func (l *Logger) Tracef(format string, v ...interface{}) {
+	l.logf(LevelTrace, format, v...)
+}
+
 // Debug sends debugging information
 func (l *Logger) Debug(v ...interface{}) {
 	l.log(LevelDebug, v...)

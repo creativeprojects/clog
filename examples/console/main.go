@@ -14,6 +14,8 @@ func main() {
 	clog.SetDefaultLogger(logger)
 
 	fmt.Println("\n== Quick access using package functions ==")
+	clog.Trace("trace ", "message")
+	clog.Tracef("%s %s", "another", "trace")
 	clog.Debug("debug ", "message")
 	clog.Debugf("%s %s", "another", "debug")
 	clog.Info("info ", "message")
@@ -27,7 +29,7 @@ func main() {
 
 	fmt.Println("\n== Using a new console logger ==")
 	logger = clog.NewLogger(clog.NewConsoleHandler("", log.Lshortfile|log.LstdFlags))
-	for i := clog.LevelDebug; i <= clog.LevelError; i++ {
+	for i := clog.LevelTrace; i <= clog.LevelError; i++ {
 		level := clog.LogLevel(i)
 		logger.Log(level, "Test message level ", level.String())
 	}

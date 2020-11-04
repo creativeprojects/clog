@@ -5,7 +5,8 @@ type LogLevel int
 
 // LogLevel
 const (
-	LevelDebug LogLevel = iota
+	LevelTrace LogLevel = iota
+	LevelDebug
 	LevelInfo
 	LevelWarning
 	LevelError
@@ -14,6 +15,8 @@ const (
 // String representation of a level (5 characters)
 func (level LogLevel) String() string {
 	switch level {
+	case LevelTrace:
+		return "TRACE"
 	case LevelDebug:
 		return "DEBUG"
 	case LevelInfo:

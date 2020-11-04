@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	numLevels = 4 // Debug, Info, Warn, Error
+	numLevels = 5 // Trace, Debug, Info, Warn, Error
 )
 
 // ConsoleHandler logs messages to the console (in colour)
@@ -30,18 +30,21 @@ func NewConsoleHandler(prefix string, flag int) *ConsoleHandler {
 func (l *ConsoleHandler) init() {
 	l.colorMaps = map[string][numLevels]*color.Color{
 		"none": {
+			LevelTrace:   nil,
 			LevelDebug:   nil,
 			LevelInfo:    nil,
 			LevelWarning: color.New(color.Bold),
 			LevelError:   color.New(color.Bold),
 		},
 		"light": {
+			LevelTrace:   nil,
 			LevelDebug:   color.New(color.FgGreen),
 			LevelInfo:    color.New(color.FgCyan),
 			LevelWarning: color.New(color.FgMagenta, color.Bold),
 			LevelError:   color.New(color.FgRed, color.Bold),
 		},
 		"dark": {
+			LevelTrace:   nil,
 			LevelDebug:   color.New(color.FgHiGreen),
 			LevelInfo:    color.New(color.FgHiCyan),
 			LevelWarning: color.New(color.FgHiMagenta, color.Bold),

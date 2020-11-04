@@ -29,6 +29,16 @@ func Logf(level LogLevel, format string, v ...interface{}) {
 	defaultLogf(level, format, v...)
 }
 
+// Trace sends trace information for heavy debugging
+func Trace(v ...interface{}) {
+	defaultLog(LevelTrace, v...)
+}
+
+// Tracef sends trace information for heavy debugging
+func Tracef(format string, v ...interface{}) {
+	defaultLogf(LevelTrace, format, v...)
+}
+
 // Debug sends debugging information
 func Debug(v ...interface{}) {
 	defaultLog(LevelDebug, v...)
