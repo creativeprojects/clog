@@ -13,7 +13,7 @@ GOPATH?=`$(GOCMD) env GOPATH`
 TESTS=./...
 COVERAGE_FILE=coverage.out
 
-.PHONY: all test coverage clean
+.PHONY: all test coverage clean staticcheck
 
 all: test
 
@@ -27,3 +27,8 @@ coverage:
 clean:
 		$(GOCLEAN)
 		rm -rf $(COVERAGE_FILE)
+
+staticcheck:
+	go get -u honnef.co/go/tools/cmd/staticcheck
+	go run honnef.co/go/tools/cmd/staticcheck ./...
+	go mod tidy
