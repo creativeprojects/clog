@@ -40,7 +40,7 @@ func SetTestLog(t TestLogInterface) {
 // CloseTestLog at the end of the test otherwise the logger will keep a reference on t.
 // For a description on how to use it, see SetTestLog()
 func CloseTestLog() {
-	SetDefaultLogger(NewLogger(&DiscardHandler{}))
+	SetDefaultLogger(NewLogger(NewDiscardHandler()))
 }
 
 // LogEntry sends a log entry with the specified level

@@ -32,7 +32,7 @@ func TestStandardLogPrintf(t *testing.T) {
 func TestStandardLogFatal(t *testing.T) {
 	// Nice trick found here: https://stackoverflow.com/a/33404435
 	if os.Getenv("BE_CRASHER") == "1" {
-		NewStandardLogger(LevelError, &DiscardHandler{}).Fatal("")
+		NewStandardLogger(LevelError, NewDiscardHandler()).Fatal("")
 		return
 	}
 	cmd := exec.Command(os.Args[0], "-test.run=TestStandardLogFatal")
@@ -47,7 +47,7 @@ func TestStandardLogFatal(t *testing.T) {
 func TestStandardLogFatalln(t *testing.T) {
 	// Nice trick found here: https://stackoverflow.com/a/33404435
 	if os.Getenv("BE_CRASHER") == "1" {
-		NewStandardLogger(LevelError, &DiscardHandler{}).Fatalln("")
+		NewStandardLogger(LevelError, NewDiscardHandler()).Fatalln("")
 		return
 	}
 	cmd := exec.Command(os.Args[0], "-test.run=TestStandardLogFatalln")
@@ -62,7 +62,7 @@ func TestStandardLogFatalln(t *testing.T) {
 func TestStandardLogFatalf(t *testing.T) {
 	// Nice trick found here: https://stackoverflow.com/a/33404435
 	if os.Getenv("BE_CRASHER") == "1" {
-		NewStandardLogger(LevelError, &DiscardHandler{}).Fatalf("")
+		NewStandardLogger(LevelError, NewDiscardHandler()).Fatalf("")
 		return
 	}
 	cmd := exec.Command(os.Args[0], "-test.run=TestStandardLogFatalf")

@@ -53,3 +53,17 @@ func BenchmarkStreamFilteredFormattedMessages(b *testing.B) {
 		logger.Infof("Message with a %s and a %d", param1, param2)
 	}
 }
+
+func TestPackage(t *testing.T) {
+	logger := NewFilteredConsoleLogger(LevelInfo)
+	logger.Trace("trace")
+	logger.Tracef("%s", "trace")
+	logger.Debug("debug")
+	logger.Debugf("%s", "debug")
+	logger.Info("info")
+	logger.Infof("%s", "info")
+	logger.Warning("warning")
+	logger.Warningf("%s", "warning")
+	logger.Error("error")
+	logger.Errorf("%s", "error")
+}

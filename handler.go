@@ -9,3 +9,9 @@ type Handler interface {
 	LogEntry(LogEntry) error
 	SetPrefix(string)
 }
+
+// HandlerChain is a handler that act as a middleware => you can get and set the next handler in the chain
+type HandlerChain interface {
+	GetHandler() Handler
+	SetHandler(handler Handler)
+}

@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// TextHandler logs messages to the console (in colour)
+// TextHandler logs messages directly to the console
 type TextHandler struct {
 	logger *log.Logger
 }

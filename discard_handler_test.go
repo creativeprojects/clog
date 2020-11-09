@@ -6,7 +6,7 @@ import (
 
 func BenchmarkDiscardHandler(b *testing.B) {
 	b.ReportAllocs()
-	logger := NewLogger(&DiscardHandler{})
+	logger := NewLogger(NewDiscardHandler())
 	param1 := "string"
 	param2 := 0
 
@@ -17,7 +17,7 @@ func BenchmarkDiscardHandler(b *testing.B) {
 
 func BenchmarkDiscardHandlerStaticMessage(b *testing.B) {
 	b.ReportAllocs()
-	logger := NewLogger(&DiscardHandler{})
+	logger := NewLogger(NewDiscardHandler())
 
 	for i := 0; i < b.N; i++ {
 		logger.Info("message")

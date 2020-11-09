@@ -18,7 +18,7 @@ COVERAGE_FILE=coverage.out
 all: test
 
 test:
-		$(GOTEST) -v $(TESTS)
+		$(GOTEST) -race -v $(TESTS)
 
 coverage:
 		$(GOTEST) -coverprofile=$(COVERAGE_FILE) $(TESTS)

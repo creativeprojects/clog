@@ -16,7 +16,7 @@ func TestWriter(t *testing.T) {
 
 func BenchmarkWriter(b *testing.B) {
 	b.ReportAllocs()
-	stdlog := log.New(NewWriter(LevelInfo, &DiscardHandler{}), "1234567890", 0)
+	stdlog := log.New(NewWriter(LevelInfo, NewDiscardHandler()), "1234567890", 0)
 
 	for i := 0; i < b.N; i++ {
 		stdlog.Printf("%s%s", "12345", "12345")
