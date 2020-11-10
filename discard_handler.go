@@ -1,10 +1,5 @@
 package clog
 
-var (
-	// errorDiscarded is sent when using the Discard handler
-	errorDiscarded = ErrMessageDiscarded
-)
-
 // DiscardHandler forgets any log message
 type DiscardHandler struct{}
 
@@ -15,7 +10,7 @@ func NewDiscardHandler() *DiscardHandler {
 
 // LogEntry discards the LogEntry
 func (l *DiscardHandler) LogEntry(LogEntry) error {
-	return errorDiscarded
+	return ErrMessageDiscarded
 }
 
 // SetPrefix sets a prefix on every log message
