@@ -1,5 +1,7 @@
 package clog
 
+import "errors"
+
 // SafeHandler sends logs to an alternate destination when the primary destination fails
 type SafeHandler struct {
 	primaryHandler Handler
@@ -15,22 +17,29 @@ func NewSafeHandler(primary, backup Handler) *SafeHandler {
 }
 
 // LogEntry send messages to primaryHandler first, then to backupHandler if it had fail
-func (l *SafeHandler) LogEntry(logEntry LogEntry) error {
+func (h *SafeHandler) LogEntry(logEntry LogEntry) error {
+	if h.primaryHandler == nil {
+		return errors.New("no primary handler registered")
+	}
+	// don't wait until we get an error to also check the backup handler
+	if h.backupHandler == nil {
+		return errors.New("no backup handler registered")
+	}
 	logEntry.Calldepth++
-	err := l.primaryHandler.LogEntry(logEntry)
+	err := h.primaryHandler.LogEntry(logEntry)
 	if err != nil {
-		return l.backupHandler.LogEntry(logEntry)
+		return h.backupHandler.LogEntry(logEntry)
 	}
 	return nil
 }
 
 // SetPrefix sets a prefix on every log message
-func (l *SafeHandler) SetPrefix(prefix string) {
-	if l.primaryHandler != nil {
-		l.primaryHandler.SetPrefix(prefix)
+func (h *SafeHandler) SetPrefix(prefix string) {
+	if h.primaryHandler != nil {
+		h.primaryHandler.SetPrefix(prefix)
 	}
-	if l.backupHandler != nil {
-		l.backupHandler.SetPrefix(prefix)
+	if h.backupHandler != nil {
+		h.backupHandler.SetPrefix(prefix)
 	}
 }
 

@@ -9,7 +9,7 @@ const defaultCapacity = 100
 
 // AsyncHandler forgets any log message
 type AsyncHandler struct {
-	handler Handler
+	*middlewareHandler
 	wg      sync.WaitGroup
 	entries chan LogEntry
 	done    chan interface{}
@@ -22,15 +22,15 @@ func NewAsyncHandler(destination Handler) *AsyncHandler {
 }
 
 // NewAsyncHandlerWithCapacity returns a handler that sends logs asynchronously.
-func NewAsyncHandlerWithCapacity(destination Handler, capacity uint) *AsyncHandler {
+func NewAsyncHandlerWithCapacity(next Handler, capacity uint) *AsyncHandler {
 	entries := make(chan LogEntry, capacity)
 	done := make(chan interface{})
 	handler := &AsyncHandler{
-		handler: destination,
-		wg:      sync.WaitGroup{},
-		entries: entries,
-		done:    done,
-		closed:  false,
+		middlewareHandler: newMiddlewareHandler(next),
+		wg:                sync.WaitGroup{},
+		entries:           entries,
+		done:              done,
+		closed:            false,
 	}
 	// start the goroutine to handle messages in the background
 	go func(handler Handler, entries chan LogEntry, done chan interface{}) {
@@ -39,18 +39,8 @@ func NewAsyncHandlerWithCapacity(destination Handler, capacity uint) *AsyncHandl
 		}
 		// the entries channels has been drained
 		close(done)
-	}(destination, entries, done)
+	}(next, entries, done)
 	return handler
-}
-
-// SetHandler sets a new handler for the filter
-func (h *AsyncHandler) SetHandler(handler Handler) {
-	h.handler = handler
-}
-
-// GetHandler returns the current handler used by the filter
-func (h *AsyncHandler) GetHandler() Handler {
-	return h.handler
 }
 
 // LogEntry sends the log message asynchronously to the next handler.
@@ -62,7 +52,7 @@ func (h *AsyncHandler) LogEntry(logEntry LogEntry) error {
 	if h.closed {
 		return errors.New("handler is closed")
 	}
-	if h.handler == nil {
+	if h.next == nil {
 		return errors.New("no registered handler")
 	}
 	h.entries <- logEntry
@@ -71,10 +61,10 @@ func (h *AsyncHandler) LogEntry(logEntry LogEntry) error {
 
 // SetPrefix sets a prefix on every log message
 func (h *AsyncHandler) SetPrefix(prefix string) {
-	if h.handler == nil {
+	if h.next == nil {
 		return
 	}
-	h.handler.SetPrefix(prefix)
+	h.next.SetPrefix(prefix)
 }
 
 // Close blocks until all log messages have been delivered
@@ -86,6 +76,6 @@ func (h *AsyncHandler) Close() {
 
 // Verify interface
 var (
-	_ Handler      = &AsyncHandler{}
-	_ HandlerChain = &AsyncHandler{}
+	_ Handler           = &AsyncHandler{}
+	_ MiddlewareHandler = &AsyncHandler{}
 )

@@ -74,6 +74,36 @@ func TestStandardLogFatalf(t *testing.T) {
 	t.Fatalf("process ran with err %v, want exit status 1", err)
 }
 
+func TestStandardLogFatalWithExitFunc(t *testing.T) {
+	called := 0
+	logger := NewStandardLogger(LevelError, NewDiscardHandler())
+	logger.RegisterExitFunc(func() {
+		called++
+	})
+	logger.Fatal("")
+	assert.Equal(t, called, 1)
+}
+
+func TestStandardLogFatallnWithExitFunc(t *testing.T) {
+	called := 0
+	logger := NewStandardLogger(LevelError, NewDiscardHandler())
+	logger.RegisterExitFunc(func() {
+		called++
+	})
+	logger.Fatalln("")
+	assert.Equal(t, called, 1)
+}
+
+func TestStandardLogFatalfWithExitFunc(t *testing.T) {
+	called := 0
+	logger := NewStandardLogger(LevelError, NewDiscardHandler())
+	logger.RegisterExitFunc(func() {
+		called++
+	})
+	logger.Fatalf("")
+	assert.Equal(t, called, 1)
+}
+
 func TestStandardLogPanic(t *testing.T) {
 	handler := NewMemoryHandler()
 	logger := NewStandardLogger(LevelInfo, handler)

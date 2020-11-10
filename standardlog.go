@@ -4,8 +4,9 @@ import "os"
 
 // StandardLogger can be used when you need to plug-in a standard library logger (via an interface)
 type StandardLogger struct {
-	level   LogLevel
-	handler Handler
+	level    LogLevel
+	handler  Handler
+	exitFunc func()
 }
 
 // NewStandardLogger creates a new logger that can be used in place of a standard library logger (via an interface)
@@ -13,6 +14,17 @@ func NewStandardLogger(level LogLevel, handler Handler) *StandardLogger {
 	return &StandardLogger{
 		level:   level,
 		handler: handler,
+		exitFunc: func() {
+			os.Exit(1)
+		},
+	}
+}
+
+// RegisterExitFunc allows using a different "exit" function when calling Fatal, Fatalln or Fatalf.
+// If not specified, os.Exit(1) is used
+func (l *StandardLogger) RegisterExitFunc(exitFunc func()) {
+	if exitFunc != nil {
+		l.exitFunc = exitFunc
 	}
 }
 
@@ -50,26 +62,29 @@ func (l *StandardLogger) Printf(format string, v ...interface{}) {
 }
 
 // Fatal is equivalent to l.Print() followed by a call to os.Exit(1).
+// You can change the exit function with RegisterExitFunc if needed.
 func (l *StandardLogger) Fatal(v ...interface{}) {
 	l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     l.level,
 		Values:    v,
 	})
-	os.Exit(1)
+	l.exitFunc()
 }
 
 // Fatalln is equivalent to l.Println() followed by a call to os.Exit(1).
+// You can change the exit function with RegisterExitFunc if needed.
 func (l *StandardLogger) Fatalln(v ...interface{}) {
 	l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     l.level,
 		Values:    v,
 	})
-	os.Exit(1)
+	l.exitFunc()
 }
 
 // Fatalf is equivalent to l.Printf() followed by a call to os.Exit(1).
+// You can change the exit function with RegisterExitFunc if needed.
 func (l *StandardLogger) Fatalf(format string, v ...interface{}) {
 	l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
@@ -77,7 +92,7 @@ func (l *StandardLogger) Fatalf(format string, v ...interface{}) {
 		Format:    format,
 		Values:    v,
 	})
-	os.Exit(1)
+	l.exitFunc()
 }
 
 // Panic is equivalent to l.Print() followed by a call to panic().

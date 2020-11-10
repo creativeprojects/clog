@@ -1,6 +1,7 @@
 package clog
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,4 +16,17 @@ func TestConsoleHandler(t *testing.T) {
 		})
 		assert.NoError(t, err)
 	}
+}
+
+func TestConsoleHandlerPrefix(t *testing.T) {
+	buffer := &strings.Builder{}
+	handler := NewConsoleHandler("", 0)
+	// manually change the output to our local buffer
+	handler.logger.SetOutput(buffer)
+
+	handler.LogEntry(NewLogEntry(0, LevelInfo, "hello one"))
+	handler.SetPrefix("_test_")
+	handler.LogEntry(NewLogEntry(0, LevelInfo, "hello two"))
+
+	assert.Equal(t, "hello one\n_test_hello two\n", buffer.String())
 }

@@ -54,6 +54,6 @@ func (l *LevelFilter) LogEntry(logEntry LogEntry) error {
 
 // Verify interface
 var (
-	_ Handler      = &LevelFilter{}
-	_ HandlerChain = &LevelFilter{}
+	_ Handler           = &LevelFilter{}
+	_ MiddlewareHandler = &LevelFilter{}
 )

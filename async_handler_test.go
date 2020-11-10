@@ -51,3 +51,33 @@ func TestAsyncHandlerShouldFail(t *testing.T) {
 	err := handler.LogEntry(LogEntry{})
 	assert.Error(t, err)
 }
+
+func TestAsyncHandlerCanCanSetPrefix(t *testing.T) {
+	handler := NewMemoryHandler()
+	async := NewAsyncHandler(handler)
+	async.SetPrefix("_test_")
+	async.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
+	// wait for the logs to be written
+	async.Close()
+	assert.Equal(t, "_test_hello world", handler.log[0])
+}
+
+func TestCannotSendLogsToClosedAsyncHandler(t *testing.T) {
+	handler := NewMemoryHandler()
+	async := NewAsyncHandler(handler)
+	err := async.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
+	assert.NoError(t, err)
+
+	async.Close()
+	err = async.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
+	assert.Error(t, err)
+}
+
+func TestAsyncHandlerSetNextHandler(t *testing.T) {
+	memHandler := NewMemoryHandler()
+	handler := NewAsyncHandler(memHandler)
+	assert.NotNil(t, handler.GetHandler())
+
+	handler.SetHandler(nil)
+	assert.Nil(t, handler.GetHandler())
+}

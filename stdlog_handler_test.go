@@ -18,6 +18,17 @@ func TestPrefix(t *testing.T) {
 	assert.Equal(t, "prefixDEBUG message\n", buffer.String())
 }
 
+func TestSetPrefix(t *testing.T) {
+	buffer := &bytes.Buffer{}
+	handler := NewStandardLogHandler(buffer, "no prefix", 0)
+	handler.SetPrefix("prefix")
+	handler.LogEntry(LogEntry{
+		Level:  LevelDebug,
+		Values: []interface{}{"message"},
+	})
+	assert.Equal(t, "prefixDEBUG message\n", buffer.String())
+}
+
 func TestStandardLogHandlerConcurrency(t *testing.T) {
 
 	iterations := 1000

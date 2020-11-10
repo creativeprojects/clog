@@ -3,7 +3,10 @@ package clog
 import (
 	"io/ioutil"
 	"log"
+	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func BenchmarkStreamMessages(b *testing.B) {
@@ -55,15 +58,18 @@ func BenchmarkStreamFilteredFormattedMessages(b *testing.B) {
 }
 
 func TestPackage(t *testing.T) {
-	logger := NewFilteredConsoleLogger(LevelInfo)
-	logger.Trace("trace")
-	logger.Tracef("%s", "trace")
-	logger.Debug("debug")
-	logger.Debugf("%s", "debug")
-	logger.Info("info")
-	logger.Infof("%s", "info")
-	logger.Warning("warning")
-	logger.Warningf("%s", "warning")
-	logger.Error("error")
-	logger.Errorf("%s", "error")
+	buffer := &strings.Builder{}
+	handler := defaultLogger.GetHandler().(*ConsoleHandler)
+	handler.logger.SetOutput(buffer)
+	Trace("trace")
+	Tracef("%s", "trace")
+	Debug("debug")
+	Debugf("%s", "debug")
+	Info("info")
+	Infof("%s", "info")
+	Warning("warning")
+	Warningf("%s", "warning")
+	Error("error")
+	Errorf("%s", "error")
+	assert.Equal(t, "trace\ntrace\ndebug\ndebug\ninfo\ninfo\nwarning\nwarning\nerror\nerror\n", buffer.String())
 }

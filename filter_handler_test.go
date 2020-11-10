@@ -43,3 +43,26 @@ func TestFilteredLogger(t *testing.T) {
 	}
 	assert.ElementsMatch(t, expected, logs)
 }
+
+func TestFilterHandlerShouldFail(t *testing.T) {
+	handler := NewLevelFilter(LevelInfo, nil)
+	err := handler.LogEntry(LogEntry{})
+	assert.Error(t, err)
+}
+
+func TestFilterHandlerCanChangeHandler(t *testing.T) {
+	handler := NewLevelFilter(LevelInfo, nil)
+	assert.Nil(t, handler.GetHandler())
+
+	next := NewDiscardHandler()
+	handler.SetHandler(next)
+	assert.Equal(t, next, handler.GetHandler())
+}
+
+func TestFilterHandlerCanCanSetPrefix(t *testing.T) {
+	handler := NewMemoryHandler()
+	filter := NewLevelFilter(LevelInfo, handler)
+	filter.SetPrefix("_test_")
+	filter.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
+	assert.Equal(t, "_test_hello world", handler.log[0])
+}

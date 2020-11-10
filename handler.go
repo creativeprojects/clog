@@ -10,8 +10,8 @@ type Handler interface {
 	SetPrefix(string)
 }
 
-// HandlerChain is a handler that act as a middleware => you can get and set the next handler in the chain
-type HandlerChain interface {
+// MiddlewareHandler is a Handler that act as a middleware => you can get and set the next handler in the chain
+type MiddlewareHandler interface {
 	GetHandler() Handler
 	SetHandler(handler Handler)
 }

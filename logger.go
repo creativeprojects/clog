@@ -138,6 +138,6 @@ func (l *Logger) LogEntry(logEntry LogEntry) error {
 
 // Logger is also a Handler
 var (
-	_ Handler      = &Logger{}
-	_ HandlerChain = &Logger{}
+	_ Handler           = &Logger{}
+	_ MiddlewareHandler = &Logger{}
 )

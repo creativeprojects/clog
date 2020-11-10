@@ -4,8 +4,9 @@ import "sync"
 
 // MemoryHandler save messages in memory (useful for unit testing).
 type MemoryHandler struct {
-	log []string
-	mu  sync.Mutex
+	prefix string
+	log    []string
+	mu     sync.Mutex
 }
 
 // NewMemoryHandler creates a new MemoryHandler that keeps logs in memory.
@@ -16,16 +17,19 @@ func NewMemoryHandler() *MemoryHandler {
 }
 
 // LogEntry keep the message in memory.
-func (l *MemoryHandler) LogEntry(logEntry LogEntry) error {
-	l.mu.Lock()
-	defer l.mu.Unlock()
+func (h *MemoryHandler) LogEntry(logEntry LogEntry) error {
+	h.mu.Lock()
+	defer h.mu.Unlock()
 
-	l.log = append(l.log, logEntry.GetMessage())
+	h.log = append(h.log, h.prefix+logEntry.GetMessage())
 	return nil
 }
 
-// SetPrefix does nothing on the memory handler
-func (l *MemoryHandler) SetPrefix(prefix string) {}
+// SetPrefix adds a prefix to every log message.
+// Please note no space is added between the prefix and the log message
+func (h *MemoryHandler) SetPrefix(prefix string) {
+	h.prefix = prefix
+}
 
 // Verify interface
 var (
