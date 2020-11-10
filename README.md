@@ -1,5 +1,8 @@
+[![Godoc reference](https://godoc.org/github.com/creativeprojects/clog?status.svg)](http://godoc.org/github.com/creativeprojects/clog)
 [![Build Status](https://travis-ci.com/creativeprojects/clog.svg?branch=master)](https://travis-ci.com/creativeprojects/clog)
 [![Go Report Card](https://goreportcard.com/badge/github.com/creativeprojects/clog)](https://goreportcard.com/report/github.com/creativeprojects/clog)
+[![codecov](https://codecov.io/gh/creativeprojects/clog/branch/master/graph/badge.svg?token=N11UE47ESS)](https://codecov.io/gh/creativeprojects/clog)
+
 
 # clog (console-log)
 All the fashionable loggers for Go tend to focus on structured logging, and that's perfectly fine: until you simply need a logger for a console application...
@@ -13,7 +16,8 @@ So here's yet another logger for Go:
 - redirect your logs to an io.Writer
 - get logs coming from an io.Writer
 - using the logger from the standard library under the hood
-- extensible (via handlers)
+- extensible (via handlers and middleware)
+- unit test coverage of more than 90%
 
 Have a look at the [examples](https://github.com/creativeprojects/clog/tree/master/examples) if you like the look of it
 
