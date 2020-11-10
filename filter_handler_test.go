@@ -66,3 +66,10 @@ func TestFilterHandlerCanCanSetPrefix(t *testing.T) {
 	filter.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
 	assert.Equal(t, "_test_hello world", handler.log[0])
 }
+
+func ExampleLevelFilter() {
+	logger := NewFilteredConsoleLogger(LevelInfo)
+	logger.Debug("won't be displayed")
+	logger.Info("hello world")
+	// Output: hello world
+}

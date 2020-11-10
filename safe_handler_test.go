@@ -39,3 +39,15 @@ func TestSafeHandlerCanCanSetPrefix(t *testing.T) {
 	filter.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
 	assert.Equal(t, "_test_hello world", memHandler.log[0])
 }
+
+func ExampleSafeHandler() {
+	// a safe handler is a middleware with two targets (Handler):
+	// - it will send all messages to the primary handler
+	// - it will only send the messages again to the backup handler if the primary returned an error
+
+	// let's create a safe handler with these two targets: a DiscardHandler and a TextHandler
+	// the DiscardHandler is a special handler that always discards your log messages and returns an error
+	logger := NewLogger(NewSafeHandler(NewDiscardHandler(), NewTextHandler("backup ", 0)))
+	logger.Infof("hello %s", "world")
+	// Output: backup hello world
+}

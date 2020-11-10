@@ -2,6 +2,7 @@ package clog
 
 import (
 	"log"
+	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,4 +22,15 @@ func BenchmarkWriter(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		stdlog.Printf("%s%s", "12345", "12345")
 	}
+}
+
+func ExampleWriter() {
+	// a writer can be used to redirect logs coming from a standard logger
+	writer := NewWriter(LevelError, NewTextHandler("", 0))
+
+	// create a http server with a standard log.Logger redirecting to our writer
+	server := &http.Server{
+		ErrorLog: log.New(writer, "http", 0),
+	}
+	server.Close()
 }

@@ -2,7 +2,7 @@ package clog
 
 import "errors"
 
-// errors
+// All errors that can be returned by the clog package
 var (
 	ErrNoRegisteredHandler = errors.New("no registered handler")
 	ErrHandlerClosed       = errors.New("handler is closed")

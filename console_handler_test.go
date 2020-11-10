@@ -30,3 +30,9 @@ func TestConsoleHandlerPrefix(t *testing.T) {
 
 	assert.Equal(t, "hello one\n_test_hello two\n", buffer.String())
 }
+
+func ExampleConsoleHandler() {
+	logger := NewLogger(NewConsoleHandler("example ", 0))
+	logger.Info("hello world")
+	// Output: example hello world
+}

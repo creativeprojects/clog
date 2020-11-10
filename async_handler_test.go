@@ -81,3 +81,13 @@ func TestAsyncHandlerSetNextHandler(t *testing.T) {
 	handler.SetHandler(nil)
 	assert.Nil(t, handler.GetHandler())
 }
+
+func ExampleAsyncHandler() {
+	// Close the async handler before finishing your application or you might miss the last few log messages
+	handler := NewAsyncHandler(NewTextHandler("async ", 0))
+	defer handler.Close()
+
+	logger := NewLogger(handler)
+	logger.Info("hello world")
+	// Output: async hello world
+}

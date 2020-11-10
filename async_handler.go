@@ -6,7 +6,7 @@ import (
 
 const defaultCapacity = 100
 
-// AsyncHandler forgets any log message
+// AsyncHandler asynchronously send log messages to the next handler in the chain
 type AsyncHandler struct {
 	*middlewareHandler
 	wg      sync.WaitGroup

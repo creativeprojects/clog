@@ -4,6 +4,10 @@ import (
 	"github.com/creativeprojects/clog"
 )
 
+//
+// Example how to use a StandardLogger as a drop-in replacement for log.Logger
+//
+
 // outputLogger is an interface used to bring you own logger
 type outputLogger interface {
 	Print(v ...interface{})
