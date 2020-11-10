@@ -1,7 +1,5 @@
 package clog
 
-import "errors"
-
 // SafeHandler sends logs to an alternate destination when the primary destination fails
 type SafeHandler struct {
 	primaryHandler Handler
@@ -19,11 +17,11 @@ func NewSafeHandler(primary, backup Handler) *SafeHandler {
 // LogEntry send messages to primaryHandler first, then to backupHandler if it had fail
 func (h *SafeHandler) LogEntry(logEntry LogEntry) error {
 	if h.primaryHandler == nil {
-		return errors.New("no primary handler registered")
+		return ErrNoPrimaryHandler
 	}
 	// don't wait until we get an error to also check the backup handler
 	if h.backupHandler == nil {
-		return errors.New("no backup handler registered")
+		return ErrNoBackupHandler
 	}
 	logEntry.Calldepth++
 	err := h.primaryHandler.LogEntry(logEntry)

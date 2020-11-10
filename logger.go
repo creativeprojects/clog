@@ -1,7 +1,5 @@
 package clog
 
-import "errors"
-
 // Logger frontend
 type Logger struct {
 	handler Handler
@@ -130,7 +128,7 @@ func (l *Logger) logf(level LogLevel, format string, v ...interface{}) {
 // LogEntry sends a LogEntry directly. Logger can also be used as a Handler
 func (l *Logger) LogEntry(logEntry LogEntry) error {
 	if l.handler == nil {
-		return errors.New("no registered handler")
+		return ErrNoRegisteredHandler
 	}
 	logEntry.Calldepth++
 	return l.handler.LogEntry(logEntry)

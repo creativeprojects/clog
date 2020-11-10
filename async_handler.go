@@ -1,7 +1,6 @@
 package clog
 
 import (
-	"errors"
 	"sync"
 )
 
@@ -50,10 +49,10 @@ func NewAsyncHandlerWithCapacity(next Handler, capacity uint) *AsyncHandler {
 func (h *AsyncHandler) LogEntry(logEntry LogEntry) error {
 	// make sure we don't keep sending messages to a closed channel
 	if h.closed {
-		return errors.New("handler is closed")
+		return ErrHandlerClosed
 	}
 	if h.next == nil {
-		return errors.New("no registered handler")
+		return ErrNoRegisteredHandler
 	}
 	h.entries <- logEntry
 	return nil

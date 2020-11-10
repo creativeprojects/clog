@@ -1,10 +1,8 @@
 package clog
 
-import "errors"
-
 var (
 	// errorDiscarded is sent when using the Discard handler
-	errorDiscarded = errors.New("this message is not going anywhere")
+	errorDiscarded = ErrMessageDiscarded
 )
 
 // DiscardHandler forgets any log message
