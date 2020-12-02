@@ -81,7 +81,7 @@ func Errorf(format string, v ...interface{}) {
 
 // log is used to keep a constant calldepth
 func defaultLog(level LogLevel, v ...interface{}) {
-	defaultLogger.LogEntry(LogEntry{
+	_ = defaultLogger.LogEntry(LogEntry{
 		Calldepth: 2,
 		Level:     level,
 		Values:    v,
@@ -90,7 +90,7 @@ func defaultLog(level LogLevel, v ...interface{}) {
 
 // logf is used to keep a constant calldepth
 func defaultLogf(level LogLevel, format string, v ...interface{}) {
-	defaultLogger.LogEntry(LogEntry{
+	_ = defaultLogger.LogEntry(LogEntry{
 		Calldepth: 2,
 		Level:     level,
 		Format:    format,

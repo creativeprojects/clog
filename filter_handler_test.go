@@ -63,7 +63,8 @@ func TestFilterHandlerCanCanSetPrefix(t *testing.T) {
 	handler := NewMemoryHandler()
 	filter := NewLevelFilter(LevelInfo, handler)
 	filter.SetPrefix("_test_")
-	filter.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
+	err := filter.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
+	assert.NoError(t, err)
 	assert.Equal(t, "_test_hello world", handler.log[0])
 }
 

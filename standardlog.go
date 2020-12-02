@@ -32,7 +32,7 @@ func (l *StandardLogger) RegisterExitFunc(exitFunc func()) {
 // Arguments are handled in the manner of fmt.Print.
 // A newline is appended if the last character of s is not already a newline.
 func (l *StandardLogger) Print(v ...interface{}) {
-	l.handler.LogEntry(LogEntry{
+	_ = l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     l.level,
 		Values:    v,
@@ -42,7 +42,7 @@ func (l *StandardLogger) Print(v ...interface{}) {
 // Println writes the output for a logging event.
 // Arguments are handled in the manner of fmt.Println.
 func (l *StandardLogger) Println(v ...interface{}) {
-	l.handler.LogEntry(LogEntry{
+	_ = l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     l.level,
 		Values:    v,
@@ -53,7 +53,7 @@ func (l *StandardLogger) Println(v ...interface{}) {
 // Arguments are handled in the manner of fmt.Printf.
 // A newline is appended if the last character of s is not already a newline.
 func (l *StandardLogger) Printf(format string, v ...interface{}) {
-	l.handler.LogEntry(LogEntry{
+	_ = l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     l.level,
 		Format:    format,
@@ -64,7 +64,7 @@ func (l *StandardLogger) Printf(format string, v ...interface{}) {
 // Fatal is equivalent to l.Print() followed by a call to os.Exit(1).
 // You can change the exit function with RegisterExitFunc if needed.
 func (l *StandardLogger) Fatal(v ...interface{}) {
-	l.handler.LogEntry(LogEntry{
+	_ = l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     l.level,
 		Values:    v,
@@ -75,7 +75,7 @@ func (l *StandardLogger) Fatal(v ...interface{}) {
 // Fatalln is equivalent to l.Println() followed by a call to os.Exit(1).
 // You can change the exit function with RegisterExitFunc if needed.
 func (l *StandardLogger) Fatalln(v ...interface{}) {
-	l.handler.LogEntry(LogEntry{
+	_ = l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     l.level,
 		Values:    v,
@@ -86,7 +86,7 @@ func (l *StandardLogger) Fatalln(v ...interface{}) {
 // Fatalf is equivalent to l.Printf() followed by a call to os.Exit(1).
 // You can change the exit function with RegisterExitFunc if needed.
 func (l *StandardLogger) Fatalf(format string, v ...interface{}) {
-	l.handler.LogEntry(LogEntry{
+	_ = l.handler.LogEntry(LogEntry{
 		Calldepth: 1,
 		Level:     l.level,
 		Format:    format,
@@ -102,7 +102,7 @@ func (l *StandardLogger) Panic(v ...interface{}) {
 		Level:     l.level,
 		Values:    v,
 	}
-	l.handler.LogEntry(entry)
+	_ = l.handler.LogEntry(entry)
 	panic(entry.GetMessage())
 }
 
@@ -113,7 +113,7 @@ func (l *StandardLogger) Panicln(v ...interface{}) {
 		Level:     l.level,
 		Values:    v,
 	}
-	l.handler.LogEntry(entry)
+	_ = l.handler.LogEntry(entry)
 	panic(entry.GetMessage())
 }
 
@@ -125,6 +125,6 @@ func (l *StandardLogger) Panicf(format string, v ...interface{}) {
 		Format:    format,
 		Values:    v,
 	}
-	l.handler.LogEntry(entry)
+	_ = l.handler.LogEntry(entry)
 	panic(entry.GetMessage())
 }

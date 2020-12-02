@@ -105,7 +105,7 @@ func (l *Logger) log(level LogLevel, v ...interface{}) {
 	if l.handler == nil {
 		return
 	}
-	l.handler.LogEntry(LogEntry{
+	_ = l.handler.LogEntry(LogEntry{
 		Calldepth: 2,
 		Level:     level,
 		Values:    v,
@@ -117,7 +117,7 @@ func (l *Logger) logf(level LogLevel, format string, v ...interface{}) {
 	if l.handler == nil {
 		return
 	}
-	l.handler.LogEntry(LogEntry{
+	_ = l.handler.LogEntry(LogEntry{
 		Calldepth: 2,
 		Level:     level,
 		Format:    format,

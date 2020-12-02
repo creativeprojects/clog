@@ -29,8 +29,8 @@ func NewFileHandler(filename string, prefix string, flag int) (*FileHandler, err
 //  please note this method reinstate the standard console output as default
 func (l *FileHandler) Close() {
 	if l.file != nil {
-		l.file.Sync()
-		l.file.Close()
+		_ = l.file.Sync()
+		_ = l.file.Close()
 		l.file = nil
 	}
 	// make sure any other call to the handler won't panic

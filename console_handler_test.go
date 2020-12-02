@@ -24,9 +24,11 @@ func TestConsoleHandlerPrefix(t *testing.T) {
 	// manually change the output to our local buffer
 	handler.logger.SetOutput(buffer)
 
-	handler.LogEntry(NewLogEntry(0, LevelInfo, "hello one"))
+	err := handler.LogEntry(NewLogEntry(0, LevelInfo, "hello one"))
+	assert.NoError(t, err)
 	handler.SetPrefix("_test_")
-	handler.LogEntry(NewLogEntry(0, LevelInfo, "hello two"))
+	err = handler.LogEntry(NewLogEntry(0, LevelInfo, "hello two"))
+	assert.NoError(t, err)
 
 	assert.Equal(t, "hello one\n_test_hello two\n", buffer.String())
 }

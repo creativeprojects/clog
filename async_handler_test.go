@@ -56,7 +56,8 @@ func TestAsyncHandlerCanCanSetPrefix(t *testing.T) {
 	handler := NewMemoryHandler()
 	async := NewAsyncHandler(handler)
 	async.SetPrefix("_test_")
-	async.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
+	err := async.LogEntry(NewLogEntry(3, LevelInfo, "hello world"))
+	assert.NoError(t, err)
 	// wait for the logs to be written
 	async.Close()
 	assert.Equal(t, "_test_hello world", handler.log[0])

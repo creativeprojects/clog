@@ -34,7 +34,7 @@ func NewAsyncHandlerWithCapacity(next Handler, capacity uint) *AsyncHandler {
 	// start the goroutine to handle messages in the background
 	go func(handler Handler, entries chan LogEntry, done chan interface{}) {
 		for logEntry := range entries {
-			handler.LogEntry(logEntry)
+			_ = handler.LogEntry(logEntry)
 		}
 		// the entries channels has been drained
 		close(done)
