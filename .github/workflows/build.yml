@@ -35,6 +35,8 @@ jobs:
 
     - name: Test
       run: "go test -v -race -coverprofile='coverage.out' ./..."
+      shell: bash
 
     - name: Code coverage
-      run: if [ -f coverage.out ]; then bash <(curl -s https://codecov.io/bash); fi
+      run: "if [ -f coverage.out ]; then bash <(curl -s https://codecov.io/bash); fi"
+      shell: bash
