@@ -69,7 +69,7 @@ func TestFilterHandlerCanCanSetPrefix(t *testing.T) {
 }
 
 func ExampleLevelFilter() {
-	logger := NewFilteredConsoleLogger(LevelInfo)
+	logger := NewLogger(NewLevelFilter(LevelInfo, NewTextHandler("", 0)))
 	logger.Debug("won't be displayed")
 	logger.Info("hello world")
 	// Output: hello world

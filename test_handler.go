@@ -44,17 +44,19 @@ func CloseTestLog() {
 }
 
 // LogEntry sends a log entry with the specified level
-func (l *TestHandler) LogEntry(logEntry LogEntry) error {
+func (h *TestHandler) LogEntry(logEntry LogEntry) error {
 	if logEntry.Format == "" {
-		l.t.Log(append([]interface{}{logEntry.Level.String()}, logEntry.Values...)...)
+		h.t.Log(append([]interface{}{logEntry.Level.String()}, logEntry.Values...)...)
 		return nil
 	}
-	l.t.Logf(logEntry.Level.String()+" "+logEntry.Format, logEntry.Values...)
+	h.t.Logf(logEntry.Level.String()+" "+logEntry.Format, logEntry.Values...)
 	return nil
 }
 
 // SetPrefix does nothing on the test handler
-func (l *TestHandler) SetPrefix(prefix string) {}
+func (h *TestHandler) SetPrefix(prefix string) Handler {
+	return h
+}
 
 // Verify interface
 var (

@@ -15,8 +15,9 @@ func GetDefaultLogger() *Logger {
 }
 
 // SetPrefix sets the output prefix for the standard logger
-func SetPrefix(prefix string) {
+func SetPrefix(prefix string) *Logger {
 	defaultLogger.SetPrefix(prefix)
+	return defaultLogger
 }
 
 // Log sends a log entry with the specified level

@@ -27,11 +27,14 @@ func main() {
 	clog.Log(clog.LevelDebug, "using Log function with Debug level")
 	clog.Logf(clog.LevelError, "using Logf function with %s level", clog.LevelError)
 
-	fmt.Println("\n== Using a new console logger ==")
-	logger = clog.NewLogger(clog.NewConsoleHandler("", log.Lshortfile|log.LstdFlags))
-	for i := clog.LevelTrace; i <= clog.LevelError; i++ {
-		level := clog.LogLevel(i)
-		logger.Log(level, "Test message level ", level.String())
+	for _, theme := range []string{"none", "light", "dark"} {
+		fmt.Printf("\n== Using a new console logger with theme %q ==\n", theme)
+		logger = clog.NewLogger(clog.NewConsoleHandler("", log.Lshortfile|log.LstdFlags).SetTheme(theme))
+		for i := clog.LevelTrace; i <= clog.LevelError; i++ {
+			level := clog.LogLevel(i)
+			logger.Log(level, "Test message level ", level.String())
+		}
+		fmt.Println("")
 	}
 
 	fmt.Println("\n== Using a filtered console logger ==")

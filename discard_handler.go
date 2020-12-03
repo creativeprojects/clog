@@ -9,12 +9,14 @@ func NewDiscardHandler() *DiscardHandler {
 }
 
 // LogEntry discards the LogEntry
-func (l *DiscardHandler) LogEntry(LogEntry) error {
+func (h *DiscardHandler) LogEntry(LogEntry) error {
 	return ErrMessageDiscarded
 }
 
 // SetPrefix sets a prefix on every log message
-func (l *DiscardHandler) SetPrefix(string) {}
+func (h *DiscardHandler) SetPrefix(string) Handler {
+	return h
+}
 
 // Verify interface
 var (

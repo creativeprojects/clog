@@ -32,3 +32,9 @@ func TestTextHandlerPrefix(t *testing.T) {
 
 	assert.Equal(t, "hello one\n_test_hello two\n", buffer.String())
 }
+
+func ExampleTextHandler() {
+	logger := NewLogger(NewTextHandler("example ", 0))
+	logger.Info("hello world")
+	// Output: example hello world
+}

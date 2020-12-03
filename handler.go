@@ -7,7 +7,7 @@ package clog
 // It's up to the parent handler to take action on the error: the default Logger is always going to ignore it.
 type Handler interface {
 	LogEntry(LogEntry) error
-	SetPrefix(string)
+	SetPrefix(string) Handler
 }
 
 // MiddlewareHandler is a Handler that act as a middleware => you can get and set the next handler in the chain

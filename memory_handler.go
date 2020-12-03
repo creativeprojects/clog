@@ -27,8 +27,9 @@ func (h *MemoryHandler) LogEntry(logEntry LogEntry) error {
 
 // SetPrefix adds a prefix to every log message.
 // Please note no space is added between the prefix and the log message
-func (h *MemoryHandler) SetPrefix(prefix string) {
+func (h *MemoryHandler) SetPrefix(prefix string) Handler {
 	h.prefix = prefix
+	return h
 }
 
 // Verify interface

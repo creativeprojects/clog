@@ -11,12 +11,14 @@ type asyncTestHandler struct {
 	received int
 }
 
-func (l *asyncTestHandler) LogEntry(LogEntry) error {
-	l.received++
+func (h *asyncTestHandler) LogEntry(LogEntry) error {
+	h.received++
 	time.Sleep(10 * time.Microsecond)
 	return nil
 }
-func (l *asyncTestHandler) SetPrefix(string) {}
+func (h *asyncTestHandler) SetPrefix(string) Handler {
+	return h
+}
 
 // test three stages:
 // - fill in the buffered channel (3 times)

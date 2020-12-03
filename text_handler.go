@@ -19,16 +19,17 @@ func NewTextHandler(prefix string, flag int) *TextHandler {
 }
 
 // LogEntry sends a log entry with the specified level
-func (l *TextHandler) LogEntry(logEntry LogEntry) error {
-	return l.logger.Output(logEntry.Calldepth+2, l.levelPrefix(logEntry.Level)+logEntry.GetMessage())
+func (h *TextHandler) LogEntry(logEntry LogEntry) error {
+	return h.logger.Output(logEntry.Calldepth+2, h.levelPrefix(logEntry.Level)+logEntry.GetMessage())
 }
 
 // SetPrefix sets a prefix on every log message
-func (l *TextHandler) SetPrefix(prefix string) {
-	l.logger.SetPrefix(prefix)
+func (h *TextHandler) SetPrefix(prefix string) Handler {
+	h.logger.SetPrefix(prefix)
+	return h
 }
 
-func (l *TextHandler) levelPrefix(logLevel LogLevel) string {
+func (h *TextHandler) levelPrefix(logLevel LogLevel) string {
 	switch logLevel {
 	case LevelError:
 		return "Error: "

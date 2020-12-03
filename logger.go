@@ -33,11 +33,12 @@ func (l *Logger) GetHandler() Handler {
 }
 
 // SetPrefix sets the output prefix for the standard logger
-func (l *Logger) SetPrefix(prefix string) {
+func (l *Logger) SetPrefix(prefix string) Handler {
 	if l.handler == nil {
-		return
+		return l
 	}
 	l.handler.SetPrefix(prefix)
+	return l
 }
 
 // Log sends a log entry with the specified level

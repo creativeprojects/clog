@@ -2,7 +2,6 @@ package clog
 
 import (
 	"log"
-	"os"
 
 	"github.com/fatih/color"
 )
@@ -21,73 +20,68 @@ type ConsoleHandler struct {
 // NewConsoleHandler creates a new handler to send logs to the console
 func NewConsoleHandler(prefix string, flag int) *ConsoleHandler {
 	console := &ConsoleHandler{
-		logger: log.New(os.Stdout, prefix, flag),
+		logger: log.New(color.Output, prefix, flag),
 	}
 	console.init()
 	return console
 }
 
-func (l *ConsoleHandler) init() {
-	l.colorMaps = map[string][numLevels]*color.Color{
+func (h *ConsoleHandler) init() {
+	h.colorMaps = map[string][numLevels]*color.Color{
 		"none": {
-			LevelTrace:   nil,
-			LevelDebug:   nil,
-			LevelInfo:    nil,
+			LevelTrace:   color.New(color.Reset),
+			LevelDebug:   color.New(color.Reset),
+			LevelInfo:    color.New(color.Reset),
 			LevelWarning: color.New(color.Bold),
 			LevelError:   color.New(color.Bold),
 		},
 		"light": {
-			LevelTrace:   nil,
+			LevelTrace:   color.New(color.Faint),
 			LevelDebug:   color.New(color.FgGreen),
 			LevelInfo:    color.New(color.FgCyan),
 			LevelWarning: color.New(color.FgMagenta, color.Bold),
 			LevelError:   color.New(color.FgRed, color.Bold),
 		},
 		"dark": {
-			LevelTrace:   nil,
+			LevelTrace:   color.New(color.Faint),
 			LevelDebug:   color.New(color.FgHiGreen),
 			LevelInfo:    color.New(color.FgHiCyan),
 			LevelWarning: color.New(color.FgHiMagenta, color.Bold),
 			LevelError:   color.New(color.FgHiRed, color.Bold),
 		},
 	}
-	l.levelMap = l.colorMaps["light"]
+	h.levelMap = h.colorMaps["light"]
 }
 
-// SetTheme sets the dark or light theme
-func (l *ConsoleHandler) SetTheme(theme string) {
+// SetTheme sets a new color theme, and returns the ConsoleHandler for chaining.
+// Accepted values are: "none", "light", "dark"
+func (h *ConsoleHandler) SetTheme(theme string) *ConsoleHandler {
 	var ok bool
-	l.levelMap, ok = l.colorMaps[theme]
+	h.levelMap, ok = h.colorMaps[theme]
 	if !ok {
-		l.levelMap = l.colorMaps["none"]
+		h.levelMap = h.colorMaps["none"]
 	}
+	return h
 }
 
-// Colouring activate of deactivate displaying messages in colour in the console
-func (l *ConsoleHandler) Colouring(colouring bool) {
+// Colouring activate of deactivate displaying messages in colour in the console, and returns the ConsoleHandler for chaining.
+func (h *ConsoleHandler) Colouring(colouring bool) *ConsoleHandler {
 	color.NoColor = !colouring
+	return h
 }
 
-// SetPrefix sets a prefix on every log message
-func (l *ConsoleHandler) SetPrefix(prefix string) {
-	l.logger.SetPrefix(prefix)
+// SetPrefix sets a prefix on every log message, and returns the Handler interface for chaining.
+func (h *ConsoleHandler) SetPrefix(prefix string) Handler {
+	h.logger.SetPrefix(prefix)
+	return h
 }
 
 // LogEntry sends a log entry with the specified level
-func (l *ConsoleHandler) LogEntry(logEntry LogEntry) error {
-	l.setColor(l.levelMap[logEntry.Level])
-	defer l.unsetColor()
-	return l.logger.Output(logEntry.Calldepth+2, logEntry.GetMessage())
-}
-
-func (l *ConsoleHandler) setColor(c *color.Color) {
-	if c != nil {
-		c.Set()
+func (h *ConsoleHandler) LogEntry(logEntry LogEntry) error {
+	if h.levelMap[logEntry.Level] == nil {
+		return ErrMessageDiscarded
 	}
-}
-
-func (l *ConsoleHandler) unsetColor() {
-	color.Unset()
+	return h.logger.Output(logEntry.Calldepth+2, h.levelMap[logEntry.Level].Sprint(logEntry.GetMessage()))
 }
 
 // Verify interface

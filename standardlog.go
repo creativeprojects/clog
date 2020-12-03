@@ -22,10 +22,11 @@ func NewStandardLogger(level LogLevel, handler Handler) *StandardLogger {
 
 // RegisterExitFunc allows using a different "exit" function when calling Fatal, Fatalln or Fatalf.
 // If not specified, os.Exit(1) is used
-func (l *StandardLogger) RegisterExitFunc(exitFunc func()) {
+func (l *StandardLogger) RegisterExitFunc(exitFunc func()) *StandardLogger {
 	if exitFunc != nil {
 		l.exitFunc = exitFunc
 	}
+	return l
 }
 
 // Print writes the output for a logging event.

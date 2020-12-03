@@ -59,11 +59,12 @@ func (h *AsyncHandler) LogEntry(logEntry LogEntry) error {
 }
 
 // SetPrefix sets a prefix on every log message
-func (h *AsyncHandler) SetPrefix(prefix string) {
+func (h *AsyncHandler) SetPrefix(prefix string) Handler {
 	if h.next == nil {
-		return
+		return h
 	}
 	h.next.SetPrefix(prefix)
+	return h
 }
 
 // Close blocks until all log messages have been delivered

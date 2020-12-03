@@ -16,38 +16,40 @@ func NewLevelFilter(minLevel LogLevel, destination Handler) *LevelFilter {
 }
 
 // SetLevel changes the minimum level the log entries are going to be sent to the destination logger
-func (l *LevelFilter) SetLevel(minLevel LogLevel) {
-	l.minLevel = minLevel
+func (h *LevelFilter) SetLevel(minLevel LogLevel) *LevelFilter {
+	h.minLevel = minLevel
+	return h
 }
 
 // SetHandler sets a new handler for the filter
-func (l *LevelFilter) SetHandler(handler Handler) {
-	l.handler = handler
+func (h *LevelFilter) SetHandler(handler Handler) {
+	h.handler = handler
 }
 
 // GetHandler returns the current handler used by the filter
-func (l *LevelFilter) GetHandler() Handler {
-	return l.handler
+func (h *LevelFilter) GetHandler() Handler {
+	return h.handler
 }
 
 // SetPrefix sets a prefix on every log message
-func (l *LevelFilter) SetPrefix(prefix string) {
-	if l.handler == nil {
-		return
+func (h *LevelFilter) SetPrefix(prefix string) Handler {
+	if h.handler == nil {
+		return h
 	}
-	l.handler.SetPrefix(prefix)
+	h.handler.SetPrefix(prefix)
+	return h
 }
 
 // LogEntry the LogEntry
-func (l *LevelFilter) LogEntry(logEntry LogEntry) error {
-	if l.handler == nil {
+func (h *LevelFilter) LogEntry(logEntry LogEntry) error {
+	if h.handler == nil {
 		return ErrNoRegisteredHandler
 	}
-	if logEntry.Level < l.minLevel {
+	if logEntry.Level < h.minLevel {
 		return nil
 	}
 	logEntry.Calldepth++
-	return l.handler.LogEntry(logEntry)
+	return h.handler.LogEntry(logEntry)
 }
 
 // Verify interface
