@@ -1,5 +1,5 @@
 [![Godoc reference](https://godoc.org/github.com/creativeprojects/clog?status.svg)](https://pkg.go.dev/github.com/creativeprojects/clog)
-[![Build Status](https://travis-ci.com/creativeprojects/clog.svg?branch=master)](https://travis-ci.com/creativeprojects/clog)
+![Build](https://github.com/creativeprojects/clog/workflows/Go/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/creativeprojects/clog)](https://goreportcard.com/report/github.com/creativeprojects/clog)
 [![codecov](https://codecov.io/gh/creativeprojects/clog/branch/master/graph/badge.svg?token=N11UE47ESS)](https://codecov.io/gh/creativeprojects/clog)
 
