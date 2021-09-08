@@ -7,6 +7,10 @@ package clog
 // It's up to the parent handler to take action on the error: the default Logger is always going to ignore it.
 type Handler interface {
 	LogEntry(LogEntry) error
+}
+
+// Prefixer is an optional interface on handler that supports prefixing a log message
+type Prefixer interface {
 	SetPrefix(string) Handler
 }
 

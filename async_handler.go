@@ -63,7 +63,10 @@ func (h *AsyncHandler) SetPrefix(prefix string) Handler {
 	if h.next == nil {
 		return h
 	}
-	h.next.SetPrefix(prefix)
+	prefixer, ok := h.next.(Prefixer)
+	if ok {
+		prefixer.SetPrefix(prefix)
+	}
 	return h
 }
 

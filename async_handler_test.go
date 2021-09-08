@@ -16,9 +16,6 @@ func (h *asyncTestHandler) LogEntry(LogEntry) error {
 	time.Sleep(10 * time.Microsecond)
 	return nil
 }
-func (h *asyncTestHandler) SetPrefix(string) Handler {
-	return h
-}
 
 // test three stages:
 // - fill in the buffered channel (3 times)

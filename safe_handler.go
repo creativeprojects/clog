@@ -34,10 +34,16 @@ func (h *SafeHandler) LogEntry(logEntry LogEntry) error {
 // SetPrefix sets a prefix on every log message
 func (h *SafeHandler) SetPrefix(prefix string) Handler {
 	if h.primaryHandler != nil {
-		h.primaryHandler.SetPrefix(prefix)
+		prefixer, ok := h.primaryHandler.(Prefixer)
+		if ok {
+			prefixer.SetPrefix(prefix)
+		}
 	}
 	if h.backupHandler != nil {
-		h.backupHandler.SetPrefix(prefix)
+		prefixer, ok := h.backupHandler.(Prefixer)
+		if ok {
+			prefixer.SetPrefix(prefix)
+		}
 	}
 	return h
 }

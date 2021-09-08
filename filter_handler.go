@@ -36,7 +36,10 @@ func (h *LevelFilter) SetPrefix(prefix string) Handler {
 	if h.handler == nil {
 		return h
 	}
-	h.handler.SetPrefix(prefix)
+	prefixer, ok := h.handler.(Prefixer)
+	if ok {
+		prefixer.SetPrefix(prefix)
+	}
 	return h
 }
 

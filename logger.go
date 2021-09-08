@@ -37,7 +37,10 @@ func (l *Logger) SetPrefix(prefix string) Handler {
 	if l.handler == nil {
 		return l
 	}
-	l.handler.SetPrefix(prefix)
+	prefixer, ok := l.handler.(Prefixer)
+	if ok {
+		prefixer.SetPrefix(prefix)
+	}
 	return l
 }
 
