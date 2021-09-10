@@ -10,7 +10,7 @@ import (
 )
 
 func TestSyncWriterConcurrency(t *testing.T) {
-	iterations := 10000
+	iterations := 5000
 	buffer := &bytes.Buffer{}
 	writer := NewSyncWriter(buffer)
 	wg := sync.WaitGroup{}
@@ -41,7 +41,7 @@ func (b fdBuffer) Fd() uintptr {
 }
 
 func TestSyncFdWriterConcurrency(t *testing.T) {
-	iterations := 10000
+	iterations := 5000
 	buffer := &fdBuffer{}
 	writer := NewSyncWriter(buffer)
 	wg := sync.WaitGroup{}
