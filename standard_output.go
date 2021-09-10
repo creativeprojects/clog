@@ -14,7 +14,7 @@ var (
 // Calling this function multiple times always returns the same instance of io.Writer.
 func Stdout() io.Writer {
 	if stdout == nil {
-		stdout = NewSafeWriter(os.Stdout)
+		stdout = NewSyncWriter(os.Stdout)
 	}
 	return stdout
 }
@@ -23,7 +23,7 @@ func Stdout() io.Writer {
 // Calling this function multiple times always returns the same instance of io.Writer.
 func Stderr() io.Writer {
 	if stderr == nil {
-		stderr = NewSafeWriter(os.Stderr)
+		stderr = NewSyncWriter(os.Stderr)
 	}
 	return stderr
 }
