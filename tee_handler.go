@@ -7,28 +7,34 @@ type TeeHandler struct {
 }
 
 // NewTeeHandler creates a handler that redirects logs to 2 handlers at the same time
-func NewTeeHandler(primary, backup Handler) *TeeHandler {
+func NewTeeHandler(a, b Handler) *TeeHandler {
 	return &TeeHandler{
-		firstHandler:  primary,
-		secondHandler: backup,
+		firstHandler:  a,
+		secondHandler: b,
 	}
 }
 
 // LogEntry send messages to both handlers
 func (h *TeeHandler) LogEntry(logEntry LogEntry) error {
-	if h.firstHandler == nil {
-		return ErrNoPrimaryHandler
-	}
-	// don't wait until we get an error to also check the backup handler
-	if h.secondHandler == nil {
-		return ErrNoBackupHandler
-	}
+	var err1, err2 error
 	logEntry.Calldepth++
-	err := h.firstHandler.LogEntry(logEntry)
-	if err != nil {
-		return err
+	if h.firstHandler != nil {
+		err1 = h.firstHandler.LogEntry(logEntry)
+	} else {
+		err1 = ErrNoRegisteredHandler
 	}
-	return h.secondHandler.LogEntry(logEntry)
+	if h.secondHandler != nil {
+		err2 = h.secondHandler.LogEntry(logEntry)
+	} else {
+		err2 = ErrNoRegisteredHandler
+	}
+	if err1 != nil {
+		return err1
+	}
+	if err2 != nil {
+		return err2
+	}
+	return nil
 }
 
 // SetPrefix sets a prefix on every log message
