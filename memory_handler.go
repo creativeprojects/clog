@@ -32,6 +32,11 @@ func (h *MemoryHandler) SetPrefix(prefix string) Handler {
 	return h
 }
 
+// Logs return a list of all the messages sent to the logger
+func (h *MemoryHandler) Logs() []string {
+	return h.log
+}
+
 // Verify interface
 var (
 	_ Handler = &MemoryHandler{}

@@ -21,8 +21,8 @@ func TestMemoryHandlerConcurrency(t *testing.T) {
 		}(i)
 	}
 	wg.Wait()
-	assert.Len(t, handler.log, iterations)
-	for _, entry := range handler.log {
+	assert.Len(t, handler.Logs(), iterations)
+	for _, entry := range handler.Logs() {
 		assert.Len(t, entry, 7)
 	}
 }
