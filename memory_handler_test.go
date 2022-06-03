@@ -8,7 +8,6 @@ import (
 )
 
 func TestMemoryHandlerConcurrency(t *testing.T) {
-
 	iterations := 1000
 	handler := NewMemoryHandler()
 	logger := NewLogger(handler)
@@ -25,4 +24,16 @@ func TestMemoryHandlerConcurrency(t *testing.T) {
 	for _, entry := range handler.Logs() {
 		assert.Len(t, entry, 7)
 	}
+}
+
+func TestMemoryHandlerPop(t *testing.T) {
+	handler := NewMemoryHandler()
+	logger := NewLogger(handler)
+	for i := 0; i < 3; i++ {
+		logger.Infof("log %d", i)
+	}
+	assert.Len(t, handler.Logs(), 3)
+	log := handler.Pop()
+	assert.Len(t, handler.Logs(), 2)
+	assert.Equal(t, "log 2", log)
 }

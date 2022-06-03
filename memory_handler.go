@@ -37,6 +37,13 @@ func (h *MemoryHandler) Logs() []string {
 	return h.log
 }
 
+// Pop returns the latest log from the internal storage (and removes it)
+func (h *MemoryHandler) Pop() string {
+	latest := h.log[len(h.log)-1]
+	h.log = h.log[:len(h.log)-1]
+	return latest
+}
+
 // Verify interface
 var (
 	_ Handler = &MemoryHandler{}
