@@ -1,6 +1,7 @@
 package clog
 
 import (
+	"errors"
 	"io"
 	"log"
 )
@@ -8,12 +9,14 @@ import (
 // StandardLogHandler send messages to a io.Writer using the standard logger.
 type StandardLogHandler struct {
 	stdlog *log.Logger
+	output io.Writer
 }
 
 // NewStandardLogHandler creates a handler to send the logs to io.Writer through a standard logger.
-func NewStandardLogHandler(out io.Writer, prefix string, flag int) *StandardLogHandler {
+func NewStandardLogHandler(output io.Writer, prefix string, flag int) *StandardLogHandler {
 	handler := &StandardLogHandler{
-		stdlog: log.New(out, prefix, flag),
+		stdlog: log.New(output, prefix, flag),
+		output: output,
 	}
 	return handler
 }
@@ -25,6 +28,7 @@ func (h *StandardLogHandler) LogEntry(logEntry LogEntry) error {
 
 // SetOutput sets the output destination for the logger.
 func (h *StandardLogHandler) SetOutput(output io.Writer) *StandardLogHandler {
+	h.output = output
 	h.stdlog.SetOutput(output)
 	return h
 }
@@ -33,6 +37,15 @@ func (h *StandardLogHandler) SetOutput(output io.Writer) *StandardLogHandler {
 func (h *StandardLogHandler) SetPrefix(prefix string) Handler {
 	h.stdlog.SetPrefix(prefix)
 	return h
+}
+
+// Close the output writer
+func (h *StandardLogHandler) Close() error {
+	closer, ok := h.output.(io.Closer)
+	if ok {
+		return closer.Close()
+	}
+	return errors.New("output cannot be closed")
 }
 
 // Verify interface

@@ -14,6 +14,11 @@ type Prefixer interface {
 	SetPrefix(string) Handler
 }
 
+// Closer is an optional interface on handler that supports closing its output
+type Closer interface {
+	Close() error
+}
+
 // MiddlewareHandler is a Handler that act as a middleware => you can get and set the next handler in the chain
 type MiddlewareHandler interface {
 	GetHandler() Handler

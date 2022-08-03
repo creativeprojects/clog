@@ -2,6 +2,7 @@ package clog
 
 import (
 	"bytes"
+	"os"
 	"sync"
 	"testing"
 
@@ -32,7 +33,6 @@ func TestSetPrefix(t *testing.T) {
 }
 
 func TestStandardLogHandlerConcurrency(t *testing.T) {
-
 	iterations := 1000
 	buffer := &bytes.Buffer{}
 	handler := NewStandardLogHandler(buffer, "", 0)
@@ -49,4 +49,29 @@ func TestStandardLogHandlerConcurrency(t *testing.T) {
 	for line, err := buffer.ReadString('\n'); err == nil; line, err = buffer.ReadString('\n') {
 		assert.Len(t, line, 14)
 	}
+}
+
+func TestCannotClose(t *testing.T) {
+	buffer := &bytes.Buffer{}
+	handler := NewStandardLogHandler(buffer, "", 0)
+	err := handler.Close()
+	assert.Error(t, err)
+}
+
+func TestCanClose(t *testing.T) {
+	handler := NewStandardLogHandler(os.Stdout, "", 0)
+	err := handler.Close()
+	assert.NoError(t, err)
+}
+
+func TestChangeOutput(t *testing.T) {
+	buffer := &bytes.Buffer{}
+	handler := NewStandardLogHandler(os.Stdout, "", 0)
+	handler.SetOutput(buffer)
+	err := handler.LogEntry(LogEntry{
+		Level:  LevelDebug,
+		Values: []interface{}{"message"},
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, "DEBUG message\n", buffer.String())
 }
