@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestPrefix(t *testing.T) {
@@ -59,8 +60,10 @@ func TestCannotClose(t *testing.T) {
 }
 
 func TestCanClose(t *testing.T) {
-	handler := NewStandardLogHandler(os.Stdout, "", 0)
-	err := handler.Close()
+	file, err := os.CreateTemp(t.TempDir(), "TestCanClose")
+	require.NoError(t, err)
+	handler := NewStandardLogHandler(file, "", 0)
+	err = handler.Close()
 	assert.NoError(t, err)
 }
 
