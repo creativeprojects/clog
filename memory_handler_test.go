@@ -36,4 +36,10 @@ func TestMemoryHandlerPop(t *testing.T) {
 	log := handler.Pop()
 	assert.Len(t, handler.Logs(), 2)
 	assert.Equal(t, "log 2", log)
+
+	assert.False(t, handler.Empty())
+	handler.Pop()
+	handler.Pop()
+	assert.True(t, handler.Empty())
+	assert.Panics(t, func() { handler.Pop() })
 }
