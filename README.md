@@ -26,6 +26,7 @@ Here's a very simple one:
 
 ```go
 package main
+
 import (
 	"fmt"
 	"github.com/creativeprojects/clog"
@@ -39,12 +40,12 @@ func main() {
 	log.Trace("will be discarded")
 	log.Trace(func() string { return "will not be called" })
 
-	log.Info(fmt.Sprintf, "func with params > %d", 5)
-	log.Infof("string fmt > %d", 5)
+	log.Info(fmt.Sprintf, "generated and displayed(%d)", 1)
+	log.Infof("generated and displayed(%d)", 2)
 }
 
 ```
 
-![alt text](https://github.com/creativeprojects/clog/raw/master/filter.png "FilteredHandler & ConsoleHandler")
+<img alt="example" src="https://github.com/creativeprojects/clog/raw/master/filter.png" width="300" title="FilteredHandler & ConsoleHandler">
 
 Documentation available on [GoDoc](https://pkg.go.dev/github.com/creativeprojects/clog?tab=doc)
