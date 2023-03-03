@@ -39,8 +39,21 @@ func NewLogEntryf(callDepth int, level LogLevel, format string, values ...interf
 // GetMessage returns the formatted message from Format & Values
 func (l LogEntry) GetMessage() string {
 	if l.Format == "" {
-		if len(l.Values) > 0 && reflect.TypeOf(l.Values[0]).Kind() == reflect.Func {
-			return messageFromFuncCall(l.Values)
+		if vl := len(l.Values); vl > 0 {
+			switch value := l.Values[0].(type) {
+			case string:
+				// fast path for string arg
+				if vl == 1 {
+					return value
+				}
+			case func() string:
+				// fast path for simple string func
+				return value()
+			default:
+				if reflect.TypeOf(value).Kind() == reflect.Func {
+					return messageFromFuncCall(l.Values)
+				}
+			}
 		}
 		return fmt.Sprint(l.Values...)
 	}
@@ -56,10 +69,6 @@ func (l LogEntry) GetMessageWithLevelPrefix() string {
 func messageFromFuncCall(funcAndParams []interface{}) string {
 	if len(funcAndParams) < 1 {
 		return "-"
-	}
-
-	if strFn, ok := funcAndParams[0].(func() string); ok {
-		return strFn() // fast path for simple string func
 	}
 
 	fn := reflect.ValueOf(funcAndParams[0])

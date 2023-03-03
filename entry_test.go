@@ -21,6 +21,9 @@ func TestNewLogEntryf(t *testing.T) {
 func TestNewLogEntryFunc(t *testing.T) {
 	entry := NewLogEntry(2, LevelInfo, fmt.Sprintf, "%s - %03d", "abc", 4)
 	assert.Equal(t, "abc - 004", entry.GetMessage())
+
+	entry = NewLogEntry(2, LevelInfo, func() string { return "abc" })
+	assert.Equal(t, "abc", entry.GetMessage())
 }
 
 func TestMessageFromFuncCall(t *testing.T) {
@@ -72,4 +75,46 @@ func TestMessageFromFuncCall(t *testing.T) {
 			}
 		})
 	}
+}
+
+func BenchmarkGetMessage(b *testing.B) {
+	bench := func(name string, action func()) {
+		b.Run(name, func(b *testing.B) {
+			b.ReportAllocs()
+			for i := 0; i < b.N; i++ {
+				action()
+			}
+		})
+	}
+
+	messageToCapture := ""
+	funcToCapture := func(s string) string { return s }
+
+	bench("single string", func() {
+		NewLogEntry(2, LevelInfo, "").GetMessage()
+	})
+	bench("multiple string", func() {
+		NewLogEntry(2, LevelInfo, "", "").GetMessage()
+	})
+	bench("int", func() {
+		NewLogEntry(2, LevelInfo, 1).GetMessage()
+	})
+	bench("func", func() {
+		NewLogEntry(2, LevelInfo, func() string { return "" }).GetMessage()
+	})
+	bench("func with capture", func() {
+		NewLogEntry(2, LevelInfo, func() string { return messageToCapture }).GetMessage()
+	})
+	bench("func with capture2", func() {
+		NewLogEntry(2, LevelInfo, func() string { return funcToCapture(messageToCapture) }).GetMessage()
+	})
+	bench("printf", func() {
+		NewLogEntryf(2, LevelInfo, "%s", "").GetMessage()
+	})
+	bench("func(...variadic)", func() {
+		NewLogEntry(2, LevelInfo, fmt.Sprintf, "%s", "").GetMessage()
+	})
+	bench("func(args)", func() {
+		NewLogEntry(2, LevelInfo, func(string) string { return "" }, "").GetMessage()
+	})
 }

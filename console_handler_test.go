@@ -22,6 +22,7 @@ func TestConsoleHandlerPrefix(t *testing.T) {
 	buffer := &strings.Builder{}
 	handler := NewConsoleHandler("", 0)
 	// manually change the output to our local buffer
+	handler.Colouring(false)
 	handler.logger.SetOutput(buffer)
 
 	err := handler.LogEntry(NewLogEntry(0, LevelInfo, "hello one"))
