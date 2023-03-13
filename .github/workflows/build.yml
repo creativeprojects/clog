@@ -1,10 +1,10 @@
-name: Go
+name: Build
 
 on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
+    types: [opened, synchronize, reopened]
 
 jobs:
 
@@ -18,25 +18,23 @@ jobs:
 
     steps:
 
-    - name: Set up Go 1.x
-      uses: actions/setup-go@v2
-      with:
-        go-version: ${{ matrix.go_version }}
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go_version }}
+          check-latest: true
+          cache: true
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
 
-    - name: Get dependencies
-      run: |
-        go get -v -t -d ./...
+      - name: Build
+        run: go build -v ./...
 
-    - name: Build
-      run: go build -v ./...
+      - name: Test
+        run: "go test -v -race -coverprofile='coverage.out' ./..."
+        shell: bash
 
-    - name: Test
-      run: "go test -v -race -coverprofile='coverage.out' ./..."
-      shell: bash
-
-    - name: Code coverage
-      run: "if [ -f coverage.out ]; then bash <(curl -s https://codecov.io/bash); fi"
-      shell: bash
+      - name: Code coverage
+        run: "if [ -f coverage.out ]; then bash <(curl -s https://codecov.io/bash); fi"
+        shell: bash
