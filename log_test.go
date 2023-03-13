@@ -60,6 +60,7 @@ func BenchmarkStreamFilteredFormattedMessages(b *testing.B) {
 func TestPackage(t *testing.T) {
 	buffer := &strings.Builder{}
 	handler := defaultLogger.GetHandler().(*ConsoleHandler)
+	handler.Colouring(false)
 	handler.logger.SetOutput(buffer)
 	Trace("trace")
 	Tracef("%s", "trace")

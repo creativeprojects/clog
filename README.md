@@ -25,17 +25,27 @@ Have a look at the [examples](https://github.com/creativeprojects/clog/tree/mast
 Here's a very simple one:
 
 ```go
-import "github.com/creativeprojects/clog"
+package main
+
+import (
+	"fmt"
+	"github.com/creativeprojects/clog"
+)
 
 func main() {
 	log := clog.NewFilteredConsoleLogger(clog.LevelInfo)
 
-	log.Debug("will be discarded")
 	log.Info("will be displayed")
+	log.Debug("will be discarded")
+	log.Trace("will be discarded")
+	log.Trace(func() string { return "will not be called" })
+
+	log.Info(fmt.Sprintf, "generated and displayed(%d)", 1)
+	log.Infof("generated and displayed(%d)", 2)
 }
 
 ```
 
-![alt text](https://github.com/creativeprojects/clog/raw/master/filter.png "FilteredHandler & ConsoleHandler")
+<img alt="example" src="https://github.com/creativeprojects/clog/raw/master/filter.png" width="300" title="FilteredHandler & ConsoleHandler">
 
 Documentation available on [GoDoc](https://pkg.go.dev/github.com/creativeprojects/clog?tab=doc)
