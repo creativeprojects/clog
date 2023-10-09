@@ -1,12 +1,33 @@
 package clog
 
-var (
-	defaultLogger = NewConsoleLogger()
+var defaultLogger *Logger
+
+const (
+	// defaultLogBufferSize sets the buffer size to 2M for the default logger
+	defaultLogBufferSize = int64(2 * 1024 * 1024)
 )
+
+func init() { SetDefaultLogger(nil) }
 
 // SetDefaultLogger sets the logger used when using the package methods
 func SetDefaultLogger(logger *Logger) {
-	defaultLogger = logger
+	if logger == nil {
+		logger = NewLogger(
+			newOverflowHandler(
+				// Discard all log when max buffer size is reached
+				func(_ *overflowHandler) {
+					if defaultLogger == logger {
+						defaultLogger.SetHandler(NewDiscardHandler())
+					}
+				},
+				defaultLogBufferSize,
+			),
+		)
+		defaultLogger = logger
+	} else {
+		transferLogFromOverflowHandler(logger.GetHandler(), GetDefaultLogger().GetHandler())
+		defaultLogger = logger
+	}
 }
 
 // GetDefaultLogger returns the logger used when using the package methods
