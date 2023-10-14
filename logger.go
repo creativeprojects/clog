@@ -24,6 +24,7 @@ func NewFilteredConsoleLogger(minLevel LogLevel) *Logger {
 
 // SetHandler sets a new handler for the logger
 func (l *Logger) SetHandler(handler Handler) {
+	transferLogFromOverflowHandler(handler, l.handler)
 	l.handler = handler
 }
 

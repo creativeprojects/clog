@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func BenchmarkStreamMessages(b *testing.B) {
@@ -57,7 +58,65 @@ func BenchmarkStreamFilteredFormattedMessages(b *testing.B) {
 	}
 }
 
+func TestDefaultHandler(t *testing.T) {
+	// Initial type
+	defer SetDefaultLogger(nil)
+	assert.IsType(t, new(overflowHandler), GetDefaultLogger().GetHandler())
+
+	// Custom type
+	SetDefaultLogger(NewConsoleLogger())
+	assert.IsType(t, new(ConsoleHandler), GetDefaultLogger().GetHandler())
+
+	// Overflow behaviour
+	SetDefaultLogger(nil)
+	require.IsType(t, new(overflowHandler), GetDefaultLogger().GetHandler())
+
+	handler := GetDefaultLogger().GetHandler().(*overflowHandler)
+	assert.Equal(t, defaultLogBufferSize, handler.overflowSize)
+	assert.True(t, handler.Empty())
+
+	for handler == GetDefaultLogger().GetHandler() {
+		Info("log line")
+	}
+	assert.IsType(t, new(DiscardHandler), GetDefaultLogger().GetHandler())
+}
+
+func TestSetDefaultHandler(t *testing.T) {
+	// Initial type
+	defer SetDefaultLogger(nil)
+
+	SetDefaultLogger(nil)
+	Info("log line")
+
+	handler := NewMemoryHandler()
+	assert.True(t, handler.Empty())
+
+	GetDefaultLogger().SetHandler(handler)
+	assert.Same(t, handler, GetDefaultLogger().GetHandler())
+	assert.Equal(t, []string{"log line"}, handler.Logs())
+}
+
+func TestSetDefaultLogger(t *testing.T) {
+	// Initial type
+	defer SetDefaultLogger(nil)
+
+	SetDefaultLogger(nil)
+	Info("log line")
+
+	handler := NewMemoryHandler()
+	logger := NewLogger(handler)
+	assert.True(t, handler.Empty())
+
+	SetDefaultLogger(logger)
+	assert.Same(t, logger, GetDefaultLogger())
+	assert.Same(t, handler, GetDefaultLogger().GetHandler())
+	assert.Equal(t, []string{"log line"}, handler.Logs())
+}
+
 func TestPackage(t *testing.T) {
+	SetDefaultLogger(NewConsoleLogger())
+	defer SetDefaultLogger(nil)
+
 	buffer := &strings.Builder{}
 	handler := defaultLogger.GetHandler().(*ConsoleHandler)
 	handler.Colouring(false)
