@@ -3,6 +3,7 @@ package clog
 import (
 	"bytes"
 	"os"
+	"path/filepath"
 	"sync"
 	"testing"
 
@@ -77,4 +78,20 @@ func TestChangeOutput(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, "DEBUG message\n", buffer.String())
+}
+
+func TestLogOnClosedOutput(t *testing.T) {
+	logFile := filepath.Join(t.TempDir(), "file.log")
+	file, err := os.Create(logFile)
+	require.NoError(t, err)
+
+	handler := NewStandardLogHandler(file, "", 0)
+	err = handler.Close()
+	assert.NoError(t, err)
+
+	err = handler.LogEntry(LogEntry{
+		Level:  LevelDebug,
+		Values: []interface{}{"message"},
+	})
+	assert.Error(t, err)
 }
